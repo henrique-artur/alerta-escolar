@@ -5,24 +5,52 @@ import Scaffold from "@web/components/base/Scaffold";
 import AuthProvider from "@web/contexts/auth/provider";
 import { ViteDIContainer } from "@web/dicontainer";
 import "./globals.scss";
+import { PropsWithChildren } from "react";
+import { useAccount } from "@web/contexts/auth/hooks";
+import AppConfigProvider from "@web/contexts/appconfig/provider";
+import NotificationProvider from "@web/contexts/common/notification/provider";
+
+interface Props {
+	showHeader?: boolean;
+	showSideMenu?: boolean;
+}
+
+function AppConfigSetup({
+	children,
+	showHeader,
+	showSideMenu,
+}: PropsWithChildren<Props>) {
+	const account = useAccount();
+	showHeader = showSideMenu = account !== undefined;
+
+	return (
+		<AppConfigProvider showHeader={showHeader} showSideMenu={showSideMenu}>
+			{children}
+		</AppConfigProvider>
+	);
+}
 
 function App() {
 	const cachedAccount = new CacheService().getAccount();
-	const accountRoleCode = cachedAccount?.role?.code ?? "UNAUTH";
+	const accountRoleCode = cachedAccount?.role[0].code ?? "UNAUTH";
 	const initialAccountRoleType = getAccountRoleByCode(accountRoleCode);
 
 	return (
-		<AuthProvider
-			usecase={ViteDIContainer.getAuthUseCase()}
-			cacheUsecase={ViteDIContainer.getCacheUsecase()}
-		>
-			<Scaffold<AccountRoleType>
-				initialBranch={initialAccountRoleType}
-				useAccountAsIdentifier
+		<NotificationProvider>
+			<AuthProvider
+				usecase={ViteDIContainer.getAuthUseCase()}
+				cacheUsecase={ViteDIContainer.getCacheUsecase()}
 			>
-				<RouterSwitch />
-			</Scaffold>
-		</AuthProvider>
+				<AppConfigSetup>
+					<Scaffold<AccountRoleType>
+						initialBranch={initialAccountRoleType}
+						useAccountAsIdentifier
+					>
+						<RouterSwitch />
+					</Scaffold>
+				</AppConfigSetup>
+			</AuthProvider>
+		</NotificationProvider>
 	);
 }
 
