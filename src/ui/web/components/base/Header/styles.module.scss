@@ -1,0 +1,20 @@
+.container {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 1rem;
+	padding: 0 1rem;
+	background: #fff;
+
+	.profileContainer {
+		display: flex;
+		flex-grow: 1;
+		justify-content: flex-end;
+
+		img {
+			border: 1px #000 solid;
+			border-radius: 50%;
+			background-color: #ffffff1a;
+		}
+	}
+}
