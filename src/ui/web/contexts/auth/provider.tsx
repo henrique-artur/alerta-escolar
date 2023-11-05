@@ -8,6 +8,7 @@ import { AuthCTX } from ".";
 import AuthUseCase from "@interfaces/usecases/AuthUseCase";
 import { ERROR_MESSAGES } from "@language/error";
 import CacheUseCase from "@interfaces/usecases/CacheUseCase";
+import { useNotification } from "@web/contexts/common/notification/hooks";
 
 interface AuthProviderProps {
 	usecase: AuthUseCase;
@@ -19,6 +20,7 @@ function AuthProvider<Account extends BaseAccount>({
 	usecase,
 	cacheUsecase,
 }: PropsWithChildren<AuthProviderProps>): JSX.Element {
+	const notification = useNotification();
 	const cachedAccount = cacheUsecase.getAccount() as Account;
 	const [account, setAccount] = useState<Account | undefined>(cachedAccount);
 
@@ -29,7 +31,7 @@ function AuthProvider<Account extends BaseAccount>({
 			return account;
 		} catch (error) {
 			if (error instanceof AppError && error.isUnauthorized) {
-				console.log("Usuário ou senha inválidos!");
+				panic(error);
 				return;
 			}
 			panic(error);
@@ -50,7 +52,9 @@ function AuthProvider<Account extends BaseAccount>({
 		if (shouldLogout) {
 			logout();
 		}
-		console.log(message);
+		notification.error({
+			message,
+		});
 		return shouldLogout;
 	}, []);
 

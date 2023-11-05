@@ -1,54 +1,77 @@
-import { DTO } from "@typing/index";
-import { AccountProfile } from "./AccountProfile";
-import { AccountRole } from "./AccountRole";
 import { Model } from "../model";
+import { DTO } from "@typing/http";
+import { AccountRole } from "./AccountRole";
 
 class Account extends Model {
 	constructor(
 		private _id: string,
-		private _profile: AccountProfile,
-		private _role: AccountRole
+		private _name: string,
+		private _email: string,
+		private _phone: string,
+		private _whatsapp: string,
+		private _cops: [],
+		private _school: [],
+		private _role: AccountRole[]
 	) {
 		super();
 	}
 
 	static fromJSON(json: Record<string, unknown>): Account {
 		const id = String(json["id"]);
-		const profile = AccountProfile.fromJSON(json["profile"] as DTO);
-		const role = AccountRole.fromJSON(json["role"] as DTO);
-		return new Account(id, profile, role);
+		const name = String(json["full_name"]);
+		const email = String(json["email"]);
+		const phone = String(json["phone"]);
+		const whatsapp = String(json["whatsapp"]);
+		const role = (json["role"] as Record<string, unknown>[])?.map(
+			AccountRole.fromJSON
+		);
+
+		return new Account(id, name, phone, email, whatsapp, [], [], role);
 	}
 
-	toJSON(): DTO {
-		let dto = {} as DTO;
-		dto["id"] = this.id;
-		dto["profile"] = this.profile.toJSON();
-		dto["role"] = this.role.toJSON();
-		return dto;
+	toJSON(): DTO<unknown> {
+		const json = {} as DTO;
+		json["id"] = this._id;
+		json["name"] = this._name;
+		json["email"] = this._email;
+		json["phone"] = this._phone;
+		json["whatsapp"] = this._whatsapp;
+		json["cops"] = this._cops;
+		json["school"] = this._school;
+		json["role"] = this._role;
+		return json;
 	}
 
 	get id() {
 		return this._id;
 	}
 
-	get profile() {
-		return this._profile;
+	get name() {
+		return this._name;
+	}
+
+	get email() {
+		return this._email;
+	}
+
+	get phone() {
+		return this._phone;
+	}
+
+	get cops() {
+		return this._cops;
+	}
+
+	get whatsapp() {
+		return this._whatsapp;
+	}
+
+	get school() {
+		return this._school;
 	}
 
 	get role() {
 		return this._role;
-	}
-
-	get formattedName() {
-		const splittedName = this.profile.name.split(" ");
-		if (splittedName.length === 1) {
-			return splittedName[0];
-		}
-		return `${splittedName[0]} ${splittedName[1]}`;
-	}
-
-	get firstName() {
-		return this.profile.name.split(" ")[0];
 	}
 }
 

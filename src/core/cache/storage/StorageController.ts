@@ -2,8 +2,8 @@ type StorageKeys = "account" | "token";
 
 export default class StorageController {
 	private static readonly keys: Record<StorageKeys, string> = {
-		account: "<PROJECT_NAME>@USER_DATA",
-		token: "<PROJECT_NAME>@AUTH_TOKEN",
+		account: "<ALERTA_DE_PANICO>@USER_DATA",
+		token: "<ALERTA_DE_PANICO>@AUTH_TOKEN",
 	};
 
 	static set(

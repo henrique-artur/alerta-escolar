@@ -36,8 +36,10 @@ BackendClient.interceptors.response.use(
 					formattedError = AppError.Unknown(message);
 				}
 				formattedError = AppError.Unknown;
+				break;
 			case 401:
-				formattedError = AppError.Unauthorized;
+				formattedError = AppError.Unauthorized(message);
+				break;
 			case 500:
 			case 501:
 			case 502:
@@ -45,8 +47,10 @@ BackendClient.interceptors.response.use(
 				formattedError = AppError.Unknown(
 					ERROR_MESSAGES.UNAVAILABLE_SERVICE
 				);
+				break;
 			default:
 				formattedError = AppError.Unknown;
+				break;
 		}
 		return Promise.reject(formattedError);
 	}

@@ -39,7 +39,7 @@ function NavigatorProvider<BranchIdentifier extends string | number = string>({
 			changeBranchIdentifier(AccountRoleType.UNAUTH);
 			return;
 		}
-		const accountRole = getAccountRoleByCode(account.role.code);
+		const accountRole = getAccountRoleByCode(account.role[0].code);
 		changeBranchIdentifier(accountRole);
 	}, [useAccountAsIdentifier, account]);
 

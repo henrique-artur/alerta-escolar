@@ -7,21 +7,13 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { BiUser } from "react-icons/bi";
 import { useCallback } from "react";
 import { useLogin } from "@web/contexts/auth/hooks";
-import { useForm } from "antd/es/form/Form";
 import { AuthCredentials } from "@models/auth";
 
 function LoginPage() {
 	const login = useLogin();
-	const [form] = useForm();
 
-	const onFinish = useCallback(async () => {
-		return form.validateFields().then((values: Record<string, unknown>) => {
-			login(AuthCredentials.fromJSON(values))
-				.then((_) => {})
-				.catch((err) => {
-					console.log(err);
-				});
-		});
+	const onFinish = useCallback(async (values: Record<string, unknown>) => {
+		return await login(AuthCredentials.fromJSON(values));
 	}, []);
 
 	return (
@@ -40,7 +32,7 @@ function LoginPage() {
 					<Form.Item
 						className={styles.formInput}
 						label="Usuário"
-						name="user"
+						name="email"
 						required={false}
 						rules={[
 							{
@@ -71,11 +63,6 @@ function LoginPage() {
 							{
 								required: true,
 								message: "Por Favor, Digite Sua Senha!",
-							},
-							{
-								min: 8,
-								message:
-									"Sua senha deve conter ao menos 8 caracteres",
 							},
 						]}
 					>

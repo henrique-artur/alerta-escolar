@@ -11,7 +11,7 @@ class AuthResponse extends Model {
 	}
 
 	static fromJSON(json: DTO): AuthResponse {
-		const token = String(json["access_token"]);
+		const token = String(json["access"]);
 		return new AuthResponse(token);
 	}
 

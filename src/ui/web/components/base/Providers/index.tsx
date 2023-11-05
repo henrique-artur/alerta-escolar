@@ -2,6 +2,7 @@ import { PropsWithChildren } from "react";
 import NavigatorProvider, {
 	NavigationProps,
 } from "@web/contexts/common/navigator/provider";
+import SideMenuProvider from "@web/contexts/common/sidemenu/provider";
 
 function ApplicationProviders<BranchIdentifier extends string>({
 	children,
@@ -13,7 +14,7 @@ function ApplicationProviders<BranchIdentifier extends string>({
 			initialBranch={initialBranch}
 			useAccountAsIdentifier={useAccountAsIdentifier}
 		>
-			{children}
+			<SideMenuProvider>{children}</SideMenuProvider>
 		</NavigatorProvider>
 	);
 }
