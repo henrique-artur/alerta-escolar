@@ -1,11 +1,13 @@
 import { Account } from "@models/auth";
 import { DTO } from "@typing/http";
+import { useFetchRoles, useRoles } from "@web/contexts/resources/hooks";
 import { Col, Form, Input, Modal, Row, Select } from "antd";
 import { useForm } from "antd/es/form/Form";
 import {
 	ForwardedRef,
 	forwardRef,
 	useCallback,
+	useEffect,
 	useImperativeHandle,
 	useState,
 } from "react";
@@ -38,6 +40,14 @@ function CreateUsersModal(
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [roleSelected, setRoleSelected] = useState<string>();
 	const [formRef] = useForm();
+	const fetchRoles = useFetchRoles();
+	const roles = useRoles();
+
+	useEffect(() => {
+		if (!roles && !!fetchRoles) {
+			fetchRoles();
+		}
+	}, []);
 
 	useImperativeHandle(ref, () => ({
 		open,
@@ -150,20 +160,10 @@ function CreateUsersModal(
 								onSelect={handleSelect}
 								defaultActiveFirstOption={false}
 								value={roleSelected}
-								options={[
-									{
-										label: "Professor",
-										value: "8ca0fa8a-5347-4e0f-84ca-7775ebd03d50",
-									},
-									{
-										label: "Agente",
-										value: "96975b07-457b-4814-a1d1-f8801de65270",
-									},
-									{
-										label: "Administrador",
-										value: "9008a2d6-6526-4b82-adae-1f92ffef66fe",
-									},
-								]}
+								options={roles?.results.map((item) => ({
+									label: item.name,
+									value: item.id,
+								}))}
 							/>
 						</Form.Item>
 					</Col>
