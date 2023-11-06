@@ -1,4 +1,5 @@
 import ResourcesProvider from "@web/contexts/resources/provider";
+import SchoolProvider from "@web/contexts/school/provider";
 import UsersProvider from "@web/contexts/users/provider";
 import { ViteDIContainer } from "@web/dicontainer";
 import { PropsWithChildren } from "react";
@@ -10,7 +11,11 @@ function AdminProviders({ children }: PropsWithChildren) {
 				<ResourcesProvider
 					usecase={ViteDIContainer.getResourcesUseCase()}
 				>
-					{children}
+					<SchoolProvider
+						usecase={ViteDIContainer.getSchoolsUseCase()}
+					>
+						{children}
+					</SchoolProvider>
 				</ResourcesProvider>
 			</UsersProvider>
 		</>

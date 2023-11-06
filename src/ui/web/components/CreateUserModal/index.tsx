@@ -91,6 +91,8 @@ function CreateUsersModal(
 			open={isModalOpen}
 			onOk={onOk}
 			onCancel={onClose}
+			cancelText={"Cancelar"}
+			okText="Criar"
 		>
 			<Form form={formRef} layout="vertical">
 				<Row gutter={16}>
