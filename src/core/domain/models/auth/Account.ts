@@ -26,7 +26,21 @@ class Account extends Model {
 			AccountRole.fromJSON
 		);
 
-		return new Account(id, name, phone, email, whatsapp, [], [], role);
+		return new Account(id, name, email, phone, whatsapp, [], [], role);
+	}
+
+	static fromForm(data: DTO): DTO {
+		const json = {} as DTO;
+		json["first_name"] = String(data["name"]);
+		json["last_name"] = String(data["last_name"]);
+		json["email"] = String(data["email"]);
+		json["phone"] = String(data["phone"]);
+		json["whatsapp"] = String(data["whatsapp"]);
+		if (data["cops"]) json["cops"] = [String(data["cops"])];
+		if (data["schools"]) json["schools"] = [String(data["school"])];
+		json["roles"] = [String(data["roles"])];
+		json["password"] = String(data["password"]);
+		return json;
 	}
 
 	toJSON(): DTO<unknown> {

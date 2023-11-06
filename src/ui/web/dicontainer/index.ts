@@ -1,8 +1,8 @@
 import AuthAPI from "@api/auth";
-import AuthAdapter from "@interfaces/adapters/AuthAdapter";
-import AuthMock from "@mock/auth";
+import UsersAPI from "@api/users";
 import AuthService from "@services/AuthService";
 import CacheService from "@services/CacheService";
+import UsersService from "@services/UsersService";
 
 class ViteDIContainer {
 	static getCacheUsecase() {
@@ -14,6 +14,10 @@ class ViteDIContainer {
 			new AuthAPI(),
 			ViteDIContainer.getCacheUsecase()
 		);
+	}
+
+	static getUsersUseCase() {
+		return new UsersService(new UsersAPI());
 	}
 }
 
