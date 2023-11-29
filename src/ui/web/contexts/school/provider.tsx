@@ -56,6 +56,16 @@ function SchoolProvider({ usecase, children }: PropsWithChildren<Props>) {
 		return isUpdated;
 	}, []);
 
+	const findByID = useCallback(async (schoolID: string) => {
+		return await usecase
+			.findByID(schoolID)
+			.then((response) => response)
+			.catch((err) => {
+				panic(err);
+				return undefined;
+			});
+	}, []);
+
 	return (
 		<SchoolCTX.Provider
 			value={{
@@ -64,6 +74,7 @@ function SchoolProvider({ usecase, children }: PropsWithChildren<Props>) {
 				create,
 				erase,
 				update,
+				findByID,
 			}}
 		>
 			{children}

@@ -20,3 +20,7 @@ export function useEraseSchool() {
 export function useUpdateSchool() {
 	return useContextSelector(SchoolCTX, (ctx) => ctx.update);
 }
+
+export function useFindSchoolByID() {
+	return useContextSelector(SchoolCTX, (ctx) => ctx.findByID);
+}

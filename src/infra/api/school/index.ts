@@ -23,6 +23,11 @@ class SchoolAPI extends BaseAPI implements SchoolAdapter {
 		await this.client.patch(`/school/update/${school.id}`, school.toJSON());
 		return true;
 	}
+
+	async findByID(schoolID: string): Promise<School> {
+		const response = await this.client.get(`/school/get/${schoolID}`);
+		return School.fromJSON(response.data);
+	}
 }
 
 export default SchoolAPI;

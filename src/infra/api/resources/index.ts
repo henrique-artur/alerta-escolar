@@ -3,6 +3,8 @@ import BaseAPI from "..";
 import { AccountRole } from "@models/auth";
 import Pagination from "@models/pagination";
 import { DTO } from "@typing/http";
+import Address from "@models/Address";
+import Countie from "@models/Countie";
 
 class ResourcesAPI extends BaseAPI implements ResourcesAdapter {
 	async fetchRoles(): Promise<Pagination<AccountRole>> {
@@ -11,6 +13,23 @@ class ResourcesAPI extends BaseAPI implements ResourcesAdapter {
 			response.data,
 			AccountRole.fromJSON
 		);
+	}
+
+	async getAddressByZipCode(zipCode: string): Promise<Address> {
+		const response = await this.client.get<DTO>(`/address/get/${zipCode}`);
+		return Address.fromJSON(response.data);
+	}
+
+	async fetchCounties(
+		queryParams: Record<string, unknown>
+	): Promise<Pagination<Countie>> {
+		const response = await this.client.get<DTO>("counties/get/list/all", {
+			params: {
+				all: true,
+				...queryParams,
+			},
+		});
+		return Pagination.fromJSON(response.data, Countie.fromJSON);
 	}
 }
 
