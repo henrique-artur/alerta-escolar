@@ -1,3 +1,4 @@
+import CopProvider from "@web/contexts/cop/provider";
 import ResourcesProvider from "@web/contexts/resources/provider";
 import SchoolProvider from "@web/contexts/school/provider";
 import UsersProvider from "@web/contexts/users/provider";
@@ -14,7 +15,9 @@ function AdminProviders({ children }: PropsWithChildren) {
 					<SchoolProvider
 						usecase={ViteDIContainer.getSchoolsUseCase()}
 					>
-						{children}
+						<CopProvider usecase={ViteDIContainer.getCopsUseCase()}>
+							{children}
+						</CopProvider>
 					</SchoolProvider>
 				</ResourcesProvider>
 			</UsersProvider>
