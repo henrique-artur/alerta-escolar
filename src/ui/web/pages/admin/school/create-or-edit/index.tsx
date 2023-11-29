@@ -85,7 +85,10 @@ function CreateOrEditSchoolPage() {
 			const isOk = await handleOk(
 				School.fromForm({
 					...values,
-					address: address?.toJSON(),
+					address: {
+						...address?.toJSON(),
+						publicArea: values["publicArea"],
+					},
 					geolocation: Object.values(position)
 						.map((value) => value)
 						.join(", "),
@@ -147,7 +150,7 @@ function CreateOrEditSchoolPage() {
 	}, []);
 
 	return (
-		<View>
+		<View showBackButton>
 			<Form
 				form={formRef}
 				onFinish={handleConfirm}

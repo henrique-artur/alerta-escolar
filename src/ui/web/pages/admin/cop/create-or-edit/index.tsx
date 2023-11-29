@@ -85,7 +85,10 @@ function CreateOrEditCopPage() {
 			const isOk = await handleOk(
 				Cop.fromForm({
 					...values,
-					address: address?.toJSON(),
+					address: {
+						...address?.toJSON(),
+						publicArea: values["publicArea"],
+					},
 					geolocation: Object.values(position)
 						.map((value) => value)
 						.join(", "),
