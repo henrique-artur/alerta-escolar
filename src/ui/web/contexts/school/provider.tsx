@@ -27,9 +27,9 @@ function SchoolProvider({ usecase, children }: PropsWithChildren<Props>) {
 		let isCreated = false;
 		try {
 			isCreated = await usecase.create(school);
+			await fetch();
 		} catch (err) {
 			panic(err);
-			await fetch();
 		}
 		return isCreated;
 	}, []);
