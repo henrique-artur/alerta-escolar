@@ -16,3 +16,7 @@ export function useEraseUser() {
 export function useCreateUser() {
 	return useContextSelector(UsersCTX, (ctx) => ctx.create);
 }
+
+export function useUpdateUser() {
+	return useContextSelector(UsersCTX, (ctx) => ctx.update);
+}

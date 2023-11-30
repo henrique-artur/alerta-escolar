@@ -1,17 +1,25 @@
 import { Button, Table } from "antd";
 import styles from "./styles.module.scss";
-import { AiOutlineInfoCircle, AiOutlinePlus } from "react-icons/ai";
+import {
+	AiOutlineEdit,
+	AiOutlineInfoCircle,
+	AiOutlinePlus,
+} from "react-icons/ai";
 import CreateUserModal from "@web/components/CreateUserModal";
 import { useCreateUserModal } from "@web/components/CreateUserModal/hooks";
 import {
 	useCreateUser,
 	useEraseUser,
 	useFetchUsers,
+	useUpdateUser,
 	useUsers,
 } from "@web/contexts/users/hooks";
 import { useCallback, useEffect } from "react";
 import { Account } from "@models/auth";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import EraseConfirmModal from "@web/components/EraseConfirmModal";
+import { useEraseConfirmModal } from "@web/components/EraseConfirmModal/hooks";
+import View from "@web/components/base/View";
 
 const tableColumns = [
 	{
@@ -58,8 +66,10 @@ function ListUsers() {
 	const data = useUsers();
 	const erase = useEraseUser();
 	const create = useCreateUser();
+	const update = useUpdateUser();
+	const eraseConfirmModalRef = useEraseConfirmModal();
 
-	const actionButtons = useCallback((_: string, { id }: Account) => {
+	const actionButtons = useCallback((_: string, data: Account) => {
 		return (
 			<div
 				style={{
@@ -70,7 +80,17 @@ function ListUsers() {
 				<Button>
 					<AiOutlineInfoCircle size={20} />
 				</Button>
-				<Button danger type="primary" onClick={() => erase(id)}>
+				<Button
+					type="primary"
+					onClick={() => createUserModalRef.current.open(data)}
+				>
+					<AiOutlineEdit size={20} />
+				</Button>
+				<Button
+					danger
+					type="primary"
+					onClick={() => eraseConfirmModalRef.current.open(data.id)}
+				>
 					<RiDeleteBin6Line size={20} />
 				</Button>
 			</div>
@@ -86,9 +106,8 @@ function ListUsers() {
 	}, []);
 
 	return (
-		<div className={styles.container}>
-			<div className={styles.headerContainer}>
-				<h3>Listar Usuários</h3>
+		<View
+			rightButton={
 				<Button
 					size="large"
 					className={styles.addButton}
@@ -97,7 +116,8 @@ function ListUsers() {
 					<AiOutlinePlus size={20} />
 					Adicionar
 				</Button>
-			</div>
+			}
+		>
 			<Table
 				columns={tableColumns}
 				dataSource={data?.results}
@@ -108,11 +128,16 @@ function ListUsers() {
 				}}
 			/>
 			<CreateUserModal
-				title="Criar Usuário"
-				handleOk={create}
 				ref={createUserModalRef}
+				handleCreate={create}
+				handleEdit={update}
 			/>
-		</div>
+			<EraseConfirmModal
+				ref={eraseConfirmModalRef}
+				title="Deletar Usuário"
+				handleOk={(id) => erase(id!)}
+			/>
+		</View>
 	);
 }
 

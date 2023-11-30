@@ -1,34 +1,15 @@
-.container {
-	height: 100%;
-	width: 100%;
+.addButton {
+	display: flex;
+	align-items: center;
+	gap: 0.25rem;
 
-	padding-inline: 4rem;
-	padding-block: 2rem;
+	background-color: #32cd32;
+	color: #fff;
+	font-size: 18px;
 
-	.headerContainer {
-		display: flex;
-		justify-content: space-between;
-		align-items: baseline;
-
-		h3 {
-			font-size: 1.5em;
-			margin: 1rem;
-		}
-
-		.addButton {
-			display: flex;
-			align-items: center;
-			gap: 0.25rem;
-
-			background-color: #32cd32;
-			color: #fff;
-			font-size: 18px;
-
-			&:hover {
-				border-color: unset;
-				color: #fff;
-				background-color: rgba(#32cd32, 0.85);
-			}
-		}
+	&:hover {
+		border-color: unset !important;
+		color: #fff !important;
+		background-color: rgba(#32cd32, 0.85);
 	}
 }
