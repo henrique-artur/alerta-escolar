@@ -83,7 +83,6 @@ function CreateUsersModal(
 				formRef.setFieldValue("schools", data?.school[0]?.id);
 			if (data.role[0].code === "AGENT")
 				formRef.setFieldValue("cops", data?.cops[0].id);
-			formRef.setFieldValue("cops", data.cops);
 			formRef.setFieldValue("phone", data.phone);
 			formRef.setFieldValue("whatsapp", data.whatsapp);
 			setID(data.id);
