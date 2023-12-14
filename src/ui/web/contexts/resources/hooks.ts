@@ -20,3 +20,11 @@ export function useFetchCounties() {
 export function useCounties() {
 	return useContextSelector(ResourcesCTX, (ctx) => ctx.counties);
 }
+
+export function useFetchIncidentType() {
+	return useContextSelector(ResourcesCTX, (ctx) => ctx.fetchTypeIncident);
+}
+
+export function useIncidentTypes() {
+	return useContextSelector(ResourcesCTX, (ctx) => ctx.incidentTypes);
+}

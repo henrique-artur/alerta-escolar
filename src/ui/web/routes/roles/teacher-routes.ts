@@ -1,9 +1,9 @@
-import PanicButtonPage from "@web/pages/school_worker/panic-button";
+import PanicButtonPage from "@web/pages/teacher/panic-button";
 import { NavigationBranch } from "../types";
 import { AiFillCheckSquare, AiTwotoneAlert } from "react-icons/ai";
 import { BiMailSend } from "react-icons/bi";
-import SendAlertPage from "@web/pages/school_worker/send-alert";
-import OccurrenceResumePage from "@web/pages/school_worker/occurence-resume";
+import SendAlertPage from "@web/pages/teacher/send-alert";
+import OccurrenceResumePage from "@web/pages/teacher/occurence-resume";
 
 export const routes: NavigationBranch = {
 	redirectPath: "/professor/botao-de-panico",
@@ -15,19 +15,21 @@ export const routes: NavigationBranch = {
 					name: "Botão de Pânico",
 					path: "/professor/botao-de-panico",
 					page: PanicButtonPage,
-					icon: AiTwotoneAlert({}),
+					icon: AiTwotoneAlert({ size: 22 }),
 				},
 				{
-					name: "Enviar Alerta",
-					path: "/professor/enviar-alerta",
+					name: "Complemento do Alerta",
+					path: "/professor/complemento-alerta/:id",
 					page: SendAlertPage,
-					icon: BiMailSend({}),
+					icon: BiMailSend({ size: 22 }),
+					hidden: true,
 				},
 				{
 					name: "Resumo da Ocorrência",
-					path: "/professor/occurrence-resume",
+					path: "/professor/resumo-ocorrencia/:id",
 					page: OccurrenceResumePage,
-					icon: AiFillCheckSquare({}),
+					icon: AiFillCheckSquare({ size: 22 }),
+					hidden: true,
 				},
 			],
 		},

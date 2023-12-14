@@ -5,6 +5,7 @@ import Pagination from "@models/pagination";
 import { DTO } from "@typing/http";
 import Address from "@models/Address";
 import Countie from "@models/Countie";
+import TypeIncident from "@models/TypeIncident";
 
 class ResourcesAPI extends BaseAPI implements ResourcesAdapter {
 	async fetchRoles(): Promise<Pagination<AccountRole>> {
@@ -30,6 +31,16 @@ class ResourcesAPI extends BaseAPI implements ResourcesAdapter {
 			},
 		});
 		return Pagination.fromJSON(response.data, Countie.fromJSON);
+	}
+
+	async fetchTypeIncident(
+		queryParams?: Record<string, unknown>
+	): Promise<TypeIncident[]> {
+		const response = await this.client.get<DTO[]>(
+			"type_incident/get/list/all",
+			{ params: { all: true, ...queryParams } }
+		);
+		return response.data.map(TypeIncident.fromJSON);
 	}
 }
 

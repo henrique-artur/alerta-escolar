@@ -56,6 +56,10 @@ class Address extends Model {
 	get publicArea() {
 		return this._publicArea;
 	}
+
+	completeAddres() {
+		return `${this.publicArea}, ${this.district}, ${this._location} - ${this._uf}, ${this._zipCode}`;
+	}
 }
 
 export default Address;

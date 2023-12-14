@@ -37,8 +37,11 @@ BackendClient.interceptors.response.use(
 				}
 				formattedError = AppError.Unknown;
 				break;
-			case 401:
+			case 403:
 				formattedError = AppError.Unauthorized(message);
+				break;
+			case 422:
+				formattedError = AppError.UnprocessableEntity(message);
 				break;
 			case 500:
 			case 501:

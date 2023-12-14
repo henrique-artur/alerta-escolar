@@ -5,6 +5,7 @@ import Pagination from "@models/pagination";
 import { AccountRole } from "@models/auth";
 import { usePanic } from "../auth/hooks";
 import Countie from "@models/Countie";
+import TypeIncident from "@models/TypeIncident";
 
 interface Props {
 	usecase: ResourcesUseCase;
@@ -14,6 +15,7 @@ function ResourcesProvider({ usecase, children }: PropsWithChildren<Props>) {
 	const panic = usePanic();
 	const [roles, setRoles] = useState<Pagination<AccountRole>>();
 	const [counties, setCounties] = useState<Pagination<Countie>>();
+	const [incidentTypes, setIncidentTypes] = useState<TypeIncident[]>();
 
 	const fetch = useCallback(async () => {
 		setRoles(undefined);
@@ -48,6 +50,18 @@ function ResourcesProvider({ usecase, children }: PropsWithChildren<Props>) {
 		[]
 	);
 
+	const fetchTypeIncident = useCallback(
+		async (queryParams: Record<string, unknown>) => {
+			return usecase
+				.fetchTypeIncident(queryParams)
+				.then(setIncidentTypes)
+				.catch((err) => {
+					panic(err);
+				});
+		},
+		[]
+	);
+
 	return (
 		<ResourcesCTX.Provider
 			value={{
@@ -56,6 +70,8 @@ function ResourcesProvider({ usecase, children }: PropsWithChildren<Props>) {
 				getAddressByZipCode,
 				fetchCounties,
 				counties,
+				fetchTypeIncident,
+				incidentTypes,
 			}}
 		>
 			{children}
