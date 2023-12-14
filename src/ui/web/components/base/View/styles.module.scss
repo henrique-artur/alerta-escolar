@@ -2,7 +2,7 @@
 	height: 100%;
 	width: 100%;
 
-	padding: 1.5rem;
+	padding: 1rem;
 
 	.content {
 		height: 100%;
@@ -11,6 +11,9 @@
 
 		background-color: #fff;
 		border-radius: 6px;
+
+		overflow-y: scroll;
+		overflow-x: hidden;
 
 		.headerContainer {
 			display: flex;

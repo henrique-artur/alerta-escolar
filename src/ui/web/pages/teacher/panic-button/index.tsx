@@ -6,23 +6,37 @@ import styles from "./styles.module.scss";
 import { AiFillAlert } from "react-icons/ai";
 import { useNavigate } from "react-router-dom";
 import CardInfo from "@web/components/CardInfo";
+import View from "@web/components/base/View";
+import { useAccount } from "@web/contexts/auth/hooks";
+import { useCallback } from "react";
+import { usePressPanicButton } from "@web/contexts/panicButton/hooks";
 
 function PanicButtonPage() {
 	const { Text, Title } = Typography;
 	const navigate = useNavigate();
+	const account = useAccount();
+	const press = usePressPanicButton();
+
+	const pressPanicButton = useCallback(async () => {
+		const result = await press();
+		if (result) navigate(`/professor/complemento-alerta/${result.id}`);
+	}, []);
 
 	return (
-		<div className={styles.container}>
+		<View hiddenPageTitle className={styles.container}>
 			<img className={styles.appLogo} src={imgLogo} alt="Logo do app" />
-			<CardInfo title={"Informações da Escola"}>
+			<CardInfo
+				title={"Informações da Escola"}
+				className={styles.cardContainer}
+			>
 				<div className={styles.infoBox}>
 					<Text>Escola</Text>
-					<Text strong>CEI ADÉLIA RUSSI SILVA</Text>
+					<Text strong>{account?.school[0].name}</Text>
 				</div>
 				<div className={styles.infoBox}>
 					<Text>Endereço</Text>
 					<Text strong>
-						Rua Santa Luiza, nº 150 - Dom Bosco 88303-573
+						{account?.school[0].address?.completeAddres()}
 					</Text>
 				</div>
 			</CardInfo>
@@ -30,7 +44,7 @@ function PanicButtonPage() {
 			<div className={styles.panicArea}>
 				<Title level={4}>Em caso de emergência aperte o botão</Title>
 				<Button
-					onClick={() => navigate("/professor/enviar-alerta")}
+					onClick={pressPanicButton}
 					className={styles.panicButton}
 					size="large"
 				>
@@ -40,17 +54,17 @@ function PanicButtonPage() {
 
 			<footer>
 				<img
-					style={{ width: 75 }}
+					style={{ width: 55 }}
 					src={radsLogo}
 					alt="imagem da logo da rads"
 				/>
 				<img
-					style={{ width: 150 }}
+					style={{ width: 130 }}
 					src={delmiroGouveiaLogo}
 					alt="imagem da logo da prefeitura de Delmiro Gouveia"
 				/>
 			</footer>
-		</div>
+		</View>
 	);
 }
 

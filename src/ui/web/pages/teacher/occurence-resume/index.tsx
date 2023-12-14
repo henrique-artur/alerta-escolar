@@ -4,38 +4,58 @@ import radsLogo from "assets/images/rads-logo.svg";
 import delmiroGouveiaLogo from "assets/images/delmiro-gouveia-logo.svg";
 import styles from "./styles.module.scss";
 import CardInfo from "@web/components/CardInfo";
+import View from "@web/components/base/View";
+import MAlert from "@models/Alert";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { useGetAlertByID } from "@web/contexts/panicButton/hooks";
+import { ALERT_STATUS } from "@utils/alertStatus";
 
 function OccurrenceResumePage() {
 	const { Text } = Typography;
+	const { id } = useParams();
+	const [alert, setAlert] = useState<MAlert>();
+	const getAlertByID = useGetAlertByID();
+
+	useEffect(() => {
+		if (!alert && id && !!getAlertByID) {
+			getAlertByID(id).then((response) => response && setAlert(response));
+		}
+	}, []);
 
 	return (
-		<div className={styles.container}>
+		<View hiddenPageTitle className={styles.container}>
 			<img className={styles.appLogo} src={imgLogo} alt="Logo do app" />
 			<CardInfo title={"Informações da Ocorrência"}>
 				<div className={styles.infoBox}>
-					<Text>Escola</Text>
-					<Text strong>CEI ADÉLIA RUSSI SILVA</Text>
+					<Text strong>Escola</Text>
+					<Text>{alert?.school.name}</Text>
 				</div>
 				<div className={styles.infoBox}>
-					<Text>Endereço</Text>
-					<Text strong>
-						Rua Santa Luiza, nº 150 - Dom Bosco 88303-573
+					<Text strong>Endereço</Text>
+					<Text>{alert?.school.address.completeAddres()}</Text>
+				</div>
+				<div className={styles.infoBox}>
+					<Text strong>Status</Text>
+					<Text>
+						{
+							ALERT_STATUS.find(
+								(item) => item.value === alert?.status
+							)?.label
+						}
 					</Text>
 				</div>
 				<div className={styles.infoBox}>
-					<Text>Motivo do Alerta</Text>
-					<Text strong>Invasão</Text>
+					<Text strong>Tipo de Incidente</Text>
+					<Text>{alert?.typeIncident?.code}</Text>
 				</div>
 				<div className={styles.infoBox}>
-					<Text>Descreva o Ocorrido</Text>
-					<Text strong>
-						Um homem estranho entrou na escola armado
-					</Text>
+					<Text strong>Descreva o Ocorrido</Text>
+					<Text>{alert?.description}</Text>
 				</div>
 			</CardInfo>
 
 			<Alert
-				style={{ width: 350 }}
 				message={"Alerta Enviado!"}
 				description={
 					"Seu alerta foi enviado com sucesso, a ajuda já está a caminho"
@@ -55,7 +75,7 @@ function OccurrenceResumePage() {
 					alt="imagem da logo da prefeitura de Delmiro Gouveia"
 				/>
 			</footer>
-		</div>
+		</View>
 	);
 }
 
