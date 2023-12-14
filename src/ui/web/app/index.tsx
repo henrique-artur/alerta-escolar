@@ -9,6 +9,11 @@ import { PropsWithChildren } from "react";
 import { useAccount } from "@web/contexts/auth/hooks";
 import AppConfigProvider from "@web/contexts/appconfig/provider";
 import NotificationProvider from "@web/contexts/common/notification/provider";
+import UsersProvider from "@web/contexts/users/provider";
+import ResourcesProvider from "@web/contexts/resources/provider";
+import SchoolProvider from "@web/contexts/school/provider";
+import CopProvider from "@web/contexts/cop/provider";
+import PanicButtonProvider from "@web/contexts/panicButton/provider";
 
 interface Props {
 	showHeader?: boolean;
@@ -25,7 +30,23 @@ function AppConfigSetup({
 
 	return (
 		<AppConfigProvider showHeader={showHeader} showSideMenu={showSideMenu}>
-			{children}
+			<UsersProvider usecase={ViteDIContainer.getUsersUseCase()}>
+				<ResourcesProvider
+					usecase={ViteDIContainer.getResourcesUseCase()}
+				>
+					<SchoolProvider
+						usecase={ViteDIContainer.getSchoolsUseCase()}
+					>
+						<CopProvider usecase={ViteDIContainer.getCopsUseCase()}>
+							<PanicButtonProvider
+								usecase={ViteDIContainer.getPanicButtonUseCase()}
+							>
+								{children}
+							</PanicButtonProvider>
+						</CopProvider>
+					</SchoolProvider>
+				</ResourcesProvider>
+			</UsersProvider>
 		</AppConfigProvider>
 	);
 }
