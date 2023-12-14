@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { NavigatorCTX } from ".";
 import {
 	formatPathnameWithParams,
+	getAllRoutePaths,
 	getAllRoutesByBranch,
 	getNavigationBranchs,
 	getRouteByPath,
@@ -30,7 +31,10 @@ function NavigatorProvider<BranchIdentifier extends string | number = string>({
 	const pathname = location.pathname;
 	const routes = getAllRoutesByBranch(branch);
 	const paths = routes.map((route) => route.path);
-	const formattedCurrentRoute = formatPathnameWithParams(pathname, paths);
+	const formattedCurrentRoute = formatPathnameWithParams(
+		pathname,
+		getAllRoutePaths(branch)
+	);
 	const currentRouteProps = getRouteByPath(branch, formattedCurrentRoute);
 
 	useEffect(() => {
@@ -47,7 +51,7 @@ function NavigatorProvider<BranchIdentifier extends string | number = string>({
 		if (!paths.includes(formattedCurrentRoute)) {
 			navigate(branch.redirectPath);
 		}
-	}, [branchIdentifier]);
+	}, [pathname, branchIdentifier]);
 
 	let pageTitle = `Alerta Escolar${
 		currentRouteProps ? ` - ${currentRouteProps.name}` : ""

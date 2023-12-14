@@ -1,29 +1,34 @@
 import { Account } from "@models/auth";
-import { DTO } from "@typing/http";
+import { Model } from "@models/model";
+import { useCops, useFetchCops } from "@web/contexts/cop/hooks";
 import { useFetchRoles, useRoles } from "@web/contexts/resources/hooks";
+import { useFetchSchools, useSchools } from "@web/contexts/school/hooks";
 import { Col, Form, Input, Modal, Row, Select } from "antd";
 import { useForm } from "antd/es/form/Form";
 import {
 	ForwardedRef,
+	KeyboardEvent,
 	forwardRef,
 	useCallback,
 	useEffect,
 	useImperativeHandle,
+	useMemo,
 	useState,
 } from "react";
 
-interface Props {
-	title: string;
-	handleOk: (data: DTO) => Promise<boolean>;
-}
+type callbackFn<T extends Model> = (data: T) => Promise<boolean>;
 
 export interface CreateUsersModalHandlers {
-	open: () => void;
+	open: (data?: Account) => void;
+}
+
+interface Props {
+	handleCreate: callbackFn<Account>;
+	handleEdit: callbackFn<Account>;
 }
 
 const FIELD_PATHS = [
-	"name",
-	"last_name",
+	"full_name",
 	"email",
 	"roles",
 	"password",
@@ -34,18 +39,33 @@ const FIELD_PATHS = [
 ];
 
 function CreateUsersModal(
-	{ title, handleOk }: Props,
+	{ handleCreate, handleEdit }: Props,
 	ref: ForwardedRef<CreateUsersModalHandlers>
 ) {
 	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [ID, setID] = useState<string>();
 	const [roleSelected, setRoleSelected] = useState<string>();
+	const [schoolSelected, setSchoolSelected] = useState<string>();
+	const [copsSelected, setCopsSelected] = useState<string>();
 	const [formRef] = useForm();
 	const fetchRoles = useFetchRoles();
 	const roles = useRoles();
+	const scholls = useSchools();
+	const fetchSchools = useFetchSchools();
+	const fetchCops = useFetchCops();
+	const cops = useCops();
 
 	useEffect(() => {
 		if (!roles && !!fetchRoles) {
 			fetchRoles();
+		}
+
+		if (!scholls && !!fetchSchools) {
+			fetchSchools();
+		}
+
+		if (!cops && !!fetchCops) {
+			fetchCops();
 		}
 	}, []);
 
@@ -53,15 +73,36 @@ function CreateUsersModal(
 		open,
 	}));
 
-	const open = useCallback(() => {
+	const open = useCallback((data?: Account) => {
+		if (data) {
+			formRef.setFieldValue("full_name", data.name);
+			formRef.setFieldValue("email", data.email);
+			formRef.setFieldValue("roles", data.role[0].id);
+			setRoleSelected(data.role[0].id);
+			if (data.role[0].code === "TEACHER")
+				formRef.setFieldValue("schools", data?.school[0]?.id);
+			if (data.role[0].code === "AGENT")
+				formRef.setFieldValue("cops", data?.cops[0].id);
+			formRef.setFieldValue("phone", data.phone);
+			formRef.setFieldValue("whatsapp", data.whatsapp);
+			setID(data.id);
+		}
 		setIsModalOpen(true);
 	}, []);
 
+	const handleOk = useMemo(() => {
+		if (ID) return handleEdit;
+		else return handleCreate;
+	}, [ID]);
+
 	const onClose = useCallback(() => {
 		setRoleSelected(undefined);
-		formRef.resetFields(FIELD_PATHS);
+		formRef.resetFields();
+		setID(undefined);
+		setSchoolSelected(undefined);
+		setCopsSelected(undefined);
 		setIsModalOpen(false);
-	}, [formRef]);
+	}, []);
 
 	const validateFields = useCallback(async () => {
 		return formRef
@@ -70,36 +111,126 @@ function CreateUsersModal(
 				return response as Record<string, unknown>;
 			})
 			.catch((_) => undefined);
-	}, [formRef]);
+	}, []);
 
 	const onOk = useCallback(async () => {
 		const validate = await validateFields();
 		if (validate !== undefined) {
-			const isOK = await handleOk(Account.fromForm(validate));
+			const isOK = await handleOk(
+				Account.fromForm({ ...validate, id: ID })
+			);
 			if (isOK) return onClose();
 		}
-	}, [formRef]);
+	}, [ID]);
 
-	const handleSelect = useCallback((value: string) => {
+	const handleRoleSelect = useCallback((value: string) => {
 		setRoleSelected(value);
 	}, []);
+
+	const handleSchoolSelect = useCallback((value: string) => {
+		setSchoolSelected(value);
+	}, []);
+
+	const handleCopsSelect = useCallback((value: string) => {
+		setCopsSelected(value);
+	}, []);
+
+	const handlePhone = useCallback(
+		(event: KeyboardEvent<HTMLInputElement>) => {
+			let input = event.currentTarget;
+			input.value = phoneMask(input.value);
+		},
+		[]
+	);
+
+	const phoneMask = useCallback((value: string) => {
+		return (
+			value
+				?.replace(/\D/g, "")
+				.replace(/(\d{2})(\d)/, "($1) $2")
+				.replace(/(\d{5})(\d)/, "$1-$2")
+				.replace(/(-\d{4})\d+?$/, "$1") ?? ""
+		);
+	}, []);
+
+	const showSelectByRoleSelected = useMemo(() => {
+		const roleCodeSelected = roles?.results
+			.find((item) => item.id === roleSelected)
+			?.code.toUpperCase();
+		switch (roleCodeSelected) {
+			case "TEACHER":
+				return (
+					<Col span={24}>
+						<Form.Item
+							label="Escola"
+							name="schools"
+							required
+							rules={[
+								{
+									required: true,
+									message: "Atribua uma escola ao usuário",
+								},
+							]}
+						>
+							<Select
+								onSelect={handleSchoolSelect}
+								defaultActiveFirstOption={false}
+								value={schoolSelected}
+								options={scholls?.results.map((item) => ({
+									label: item.name,
+									value: item.id,
+								}))}
+							/>
+						</Form.Item>
+					</Col>
+				);
+			case "AGENT":
+				return (
+					<Col span={24}>
+						<Form.Item
+							label="Delegacia"
+							name="cops"
+							required
+							rules={[
+								{
+									required: true,
+									message: "Atribua uma delegacia ao usuário",
+								},
+							]}
+						>
+							<Select
+								onSelect={handleCopsSelect}
+								defaultActiveFirstOption={false}
+								value={copsSelected}
+								options={cops?.results.map((item) => ({
+									label: item.name,
+									value: item.id,
+								}))}
+							/>
+						</Form.Item>
+					</Col>
+				);
+			default:
+				return undefined;
+		}
+	}, [roleSelected, roles, scholls, cops]);
 
 	return (
 		<Modal
 			width={700}
-			title={title}
+			title={ID ? "Editar Usuário" : "Criar Usuário"}
 			open={isModalOpen}
 			onOk={onOk}
 			onCancel={onClose}
 			cancelText={"Cancelar"}
-			okText="Criar"
+			okText={ID ? "Editar" : "Criar"}
 		>
-			<Form form={formRef} layout="vertical">
+			<Form form={formRef} layout="vertical" autoComplete="off">
 				<Row gutter={16}>
 					<Col span={12}>
 						<Form.Item
 							label="Nome"
-							name="name"
+							name="full_name"
 							required
 							rules={[
 								{
@@ -108,22 +239,7 @@ function CreateUsersModal(
 								},
 							]}
 						>
-							<Input type="text" name="user_first_name" />
-						</Form.Item>
-					</Col>
-					<Col span={12}>
-						<Form.Item
-							label="Sobrenome"
-							name="last_name"
-							required
-							rules={[
-								{
-									required: true,
-									message: "Digite um sobrenome válido",
-								},
-							]}
-						>
-							<Input type="text" name="user_last_name" />
+							<Input type="text" name="user_full_name" />
 						</Form.Item>
 					</Col>
 				</Row>
@@ -159,7 +275,7 @@ function CreateUsersModal(
 							]}
 						>
 							<Select
-								onSelect={handleSelect}
+								onSelect={handleRoleSelect}
 								defaultActiveFirstOption={false}
 								value={roleSelected}
 								options={roles?.results.map((item) => ({
@@ -184,7 +300,11 @@ function CreateUsersModal(
 							name="phone"
 							label="Telefone"
 						>
-							<Input type="phone" name="user_phone" />
+							<Input
+								type="phone"
+								onKeyUp={handlePhone}
+								name="user_phone"
+							/>
 						</Form.Item>
 					</Col>
 					<Col span={12}>
@@ -200,77 +320,34 @@ function CreateUsersModal(
 							name="whatsapp"
 							label="Whatsapp"
 						>
-							<Input type="phone" name="user_whatsapp" />
+							<Input
+								type="phone"
+								onKeyUp={handlePhone}
+								name="user_whatsapp"
+							/>
 						</Form.Item>
 					</Col>
 				</Row>
-				<Row gutter={16}>
-					{roleSelected === "role-1" && (
-						<Col span={24}>
-							<Form.Item
-								label="Escola"
-								name="schools"
-								required
-								rules={[
-									{
-										required: true,
-										message:
-											"Atribua uma escola ao usuário",
-									},
-								]}
-							>
-								<Select
-									options={[
-										{ label: "Escola 1", value: "1" },
-										{ label: "Escola 2", value: "2" },
-										{ label: "Escola 3", value: "3" },
-									]}
-								/>
-							</Form.Item>
-						</Col>
-					)}
-					{roleSelected === "role-2" && (
-						<Col span={24}>
-							<Form.Item
-								label="Delegacia"
-								name="cops"
-								required
-								rules={[
-									{
-										required: true,
-										message:
-											"Atribua uma delegacia ao usuário",
-									},
-								]}
-							>
-								<Select
-									options={[
-										{ label: "PMAL", value: "1" },
-										{ label: "Empresa 1", value: "2" },
-										{ label: "Empresa 2", value: "3" },
-									]}
-								/>
-							</Form.Item>
-						</Col>
-					)}
-				</Row>
-				<Form.Item
-					label="Senha"
-					name="password"
-					required
-					rules={[
-						{
-							required: true,
-							message: "Digite uma senha válida",
-						},
-						{
-							min: 8,
-							message: "Digite ao menos 8 caracteres",
-						},
-					]}
-				>
-					<Input.Password name="user_password" />
-				</Form.Item>
+				<Row gutter={16}>{showSelectByRoleSelected}</Row>
+				{!ID && (
+					<Form.Item
+						label="Senha"
+						name="password"
+						required
+						rules={[
+							{
+								required: true,
+								message: "Digite uma senha válida",
+							},
+							{
+								min: 8,
+								message: "Digite ao menos 8 caracteres",
+							},
+						]}
+					>
+						<Input.Password name="user_password" />
+					</Form.Item>
+				)}
 			</Form>
 		</Modal>
 	);

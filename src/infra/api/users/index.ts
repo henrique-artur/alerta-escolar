@@ -17,13 +17,18 @@ class UsersAPI extends BaseAPI implements UsersAdapter {
 		return Pagination.fromJSON<Account>(response.data, Account.fromJSON);
 	}
 
-	async create(user: DTO): Promise<boolean> {
-		await this.client.post("/users/create/", user);
+	async create(user: Account): Promise<boolean> {
+		await this.client.post("/users/create/", user.toJSON());
 		return true;
 	}
 
 	async erase(userID: string): Promise<boolean> {
 		await this.client.delete(`/users/delete/${userID}`);
+		return true;
+	}
+
+	async update(user: Account): Promise<boolean> {
+		await this.client.patch(`/users/update/${user.id}`, user.toJSON());
 		return true;
 	}
 }

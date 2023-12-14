@@ -1,0 +1,52 @@
+.container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-around;
+
+	padding: 1rem 1.75rem !important;
+
+	.appLogo {
+		height: 90px;
+	}
+
+	.cardContainer {
+		.infoBox {
+			display: flex;
+			flex-direction: column;
+			flex-wrap: wrap;
+
+			&:last-child {
+				margin-top: 0.5rem;
+			}
+		}
+	}
+
+	.panicArea {
+		width: 265px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: 0.75rem;
+
+		> h4 {
+			text-align: center;
+			margin: 0;
+		}
+
+		.panicButton {
+			height: 135px;
+			width: 135px;
+			border-radius: 50%;
+			background: #991427;
+		}
+	}
+
+	footer {
+		width: 100%;
+		display: flex;
+		justify-content: space-around;
+		margin-bottom: 0.5rem;
+	}
+}

@@ -11,15 +11,19 @@ class SchoolService implements SchoolUseCase {
 	}
 
 	async create(school: School): Promise<boolean> {
-		return await this.create(school);
+		return await this.adapter.create(school);
 	}
 
 	async erase(schoolID: string): Promise<boolean> {
-		return await this.erase(schoolID);
+		return await this.adapter.erase(schoolID);
 	}
 
 	async update(school: School): Promise<boolean> {
-		return await this.update(school);
+		return await this.adapter.update(school);
+	}
+
+	async findByID(schoolID: string): Promise<School> {
+		return await this.adapter.findByID(schoolID);
 	}
 }
 
