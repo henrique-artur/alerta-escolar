@@ -6,6 +6,7 @@ abstract class SchoolAdapter {
 	abstract create(school: School): Promise<boolean>;
 	abstract erase(schoolID: string): Promise<boolean>;
 	abstract update(school: School): Promise<boolean>;
+	abstract findByID(schoolID: string): Promise<School>;
 }
 
 export default SchoolAdapter;

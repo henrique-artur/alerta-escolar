@@ -1,7 +1,7 @@
 enum AccountRoleType {
 	UNAUTH = "unauth",
 	ADMIN = "admin",
-	"SCHOOL-WORKER" = "Professor",
+	TEACHER = "teacher",
 }
 
 export function getAccountRoleByCode(roleKey?: string) {
@@ -9,8 +9,8 @@ export function getAccountRoleByCode(roleKey?: string) {
 	switch (roleKey) {
 		case "ADMIN":
 			return AccountRoleType.ADMIN;
-		case "SCHOOL-WORKER":
-			return AccountRoleType["SCHOOL-WORKER"];
+		case "TEACHER":
+			return AccountRoleType.TEACHER;
 		default:
 			return AccountRoleType.UNAUTH;
 	}

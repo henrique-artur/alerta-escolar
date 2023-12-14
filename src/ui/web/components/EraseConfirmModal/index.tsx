@@ -40,7 +40,7 @@ function EraseConfirmModal(
 	const onOk = useCallback(async () => {
 		const isOK = await handleOk(ID!);
 		if (isOK) return onClose();
-	}, []);
+	}, [ID]);
 
 	return (
 		<Modal

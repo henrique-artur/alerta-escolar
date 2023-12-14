@@ -4,7 +4,6 @@ import UsersUseCase from "@interfaces/usecases/UsersUseCase";
 import { usePanic } from "../auth/hooks";
 import Pagination from "@models/pagination";
 import { Account } from "@models/auth";
-import { DTO } from "@typing/http";
 
 interface Props {
 	usecase: UsersUseCase;
@@ -24,7 +23,7 @@ function UsersProvider({ usecase, children }: PropsWithChildren<Props>) {
 			});
 	}, []);
 
-	const create = useCallback(async (user: DTO) => {
+	const create = useCallback(async (user: Account) => {
 		let isCreated = false;
 		try {
 			isCreated = await usecase.create(user);
@@ -46,6 +45,17 @@ function UsersProvider({ usecase, children }: PropsWithChildren<Props>) {
 		return isDeleted;
 	}, []);
 
+	const update = useCallback(async (user: Account) => {
+		let isUpdated = false;
+		try {
+			isUpdated = await usecase.update(user);
+			if (isUpdated) await fetch();
+		} catch (err) {
+			panic(err);
+		}
+		return isUpdated;
+	}, []);
+
 	return (
 		<UsersCTX.Provider
 			value={{
@@ -53,6 +63,7 @@ function UsersProvider({ usecase, children }: PropsWithChildren<Props>) {
 				users,
 				erase,
 				create,
+				update,
 			}}
 		>
 			{children}

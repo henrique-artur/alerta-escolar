@@ -27,9 +27,9 @@ function SchoolProvider({ usecase, children }: PropsWithChildren<Props>) {
 		let isCreated = false;
 		try {
 			isCreated = await usecase.create(school);
+			await fetch();
 		} catch (err) {
 			panic(err);
-			await fetch();
 		}
 		return isCreated;
 	}, []);
@@ -56,6 +56,16 @@ function SchoolProvider({ usecase, children }: PropsWithChildren<Props>) {
 		return isUpdated;
 	}, []);
 
+	const findByID = useCallback(async (schoolID: string) => {
+		return await usecase
+			.findByID(schoolID)
+			.then((response) => response)
+			.catch((err) => {
+				panic(err);
+				return undefined;
+			});
+	}, []);
+
 	return (
 		<SchoolCTX.Provider
 			value={{
@@ -64,6 +74,7 @@ function SchoolProvider({ usecase, children }: PropsWithChildren<Props>) {
 				create,
 				erase,
 				update,
+				findByID,
 			}}
 		>
 			{children}

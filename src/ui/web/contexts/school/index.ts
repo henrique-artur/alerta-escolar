@@ -8,6 +8,7 @@ interface Props {
 	create(school: School): Promise<boolean>;
 	erase(schoolID: string): Promise<boolean>;
 	update(school: School): Promise<boolean>;
+	findByID(schoolID: string): Promise<School | undefined>;
 }
 
 export const SchoolCTX = createContext({} as Props);
