@@ -2,6 +2,7 @@ enum AccountRoleType {
 	UNAUTH = "unauth",
 	ADMIN = "admin",
 	TEACHER = "teacher",
+	AGENT = "agent",
 }
 
 export function getAccountRoleByCode(roleKey?: string) {
@@ -11,6 +12,8 @@ export function getAccountRoleByCode(roleKey?: string) {
 			return AccountRoleType.ADMIN;
 		case "TEACHER":
 			return AccountRoleType.TEACHER;
+		case "AGENT":
+			return AccountRoleType.AGENT;
 		default:
 			return AccountRoleType.UNAUTH;
 	}

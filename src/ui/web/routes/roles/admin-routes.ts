@@ -1,10 +1,12 @@
-import { AiOutlineUnorderedList } from "react-icons/ai";
+import { AiOutlineUnorderedList, AiTwotoneAlert } from "react-icons/ai";
 import { NavigationBranch } from "../types";
 import ListUsers from "@web/pages/admin/list-users";
 import ListSchools from "@web/pages/admin/school/list";
 import ListCops from "@web/pages/admin/cop/list";
 import CreateOrEditSchoolPage from "@web/pages/admin/school/create-or-edit";
 import CreateOrEditCopPage from "@web/pages/admin/cop/create-or-edit";
+import ListAlertPage from "@web/pages/agent/alert/list";
+import AlertDetailsPage from "@web/pages/agent/alert/details";
 
 export const routes: NavigationBranch = {
 	redirectPath: "/admin/listar-usuarios",
@@ -41,6 +43,18 @@ export const routes: NavigationBranch = {
 					path: "/admin/listar-delegacias",
 					icon: AiOutlineUnorderedList({ size: 22 }),
 					page: ListCops,
+				},
+				{
+					name: "Listar Alertas",
+					path: "/admin/listar-alerta",
+					icon: AiOutlineUnorderedList({ size: 22 }),
+					page: ListAlertPage,
+				},
+				{
+					name: "Sala de Alerta",
+					path: "/admin/sala-alerta",
+					icon: AiTwotoneAlert({ size: 22 }),
+					page: () => AlertDetailsPage({ isWebsocket: true }),
 				},
 				{
 					name: "Criar Delegacia",

@@ -2,6 +2,7 @@ import PanicButtonAdapter from "@interfaces/adapters/PanicButtonAdapter";
 import BaseAPI from "..";
 import Alert from "@models/Alert";
 import { DTO } from "@typing/http";
+import Pagination from "@models/pagination";
 
 class PanicButtonAPI extends BaseAPI implements PanicButtonAdapter {
 	async press(): Promise<Alert> {
@@ -20,6 +21,15 @@ class PanicButtonAPI extends BaseAPI implements PanicButtonAdapter {
 			dto.toJSON()
 		);
 		return Alert.fromJSON(response.data);
+	}
+
+	async fetch(
+		queryParams?: Record<string, unknown>
+	): Promise<Pagination<Alert>> {
+		const response = await this.client.get("/button/get/list/all", {
+			params: { queryParams },
+		});
+		return Pagination.fromJSON(response.data, Alert.fromJSON);
 	}
 }
 

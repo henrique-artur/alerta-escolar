@@ -1,12 +1,22 @@
 import { MapContainer, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { PropsWithChildren } from "react";
+import { LatLngExpression } from "leaflet";
 
-function Map({ children }: PropsWithChildren) {
+interface Props {
+	center?: LatLngExpression;
+	zoom?: number;
+}
+
+function Map({
+	children,
+	center = [-9.6133065, -36.6884267],
+	zoom = 9,
+}: PropsWithChildren<Props>) {
 	return (
 		<MapContainer
-			center={[-9.6133065, -36.6884267]}
-			zoom={9}
+			center={center}
+			zoom={zoom}
 			scrollWheelZoom={true}
 			style={{
 				width: "100%",
