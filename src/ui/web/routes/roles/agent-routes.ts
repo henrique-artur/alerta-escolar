@@ -1,6 +1,6 @@
 import { NavigationBranch } from "../types";
 import { AiOutlineUnorderedList } from "react-icons/ai";
-import ListAlertPage from "@web/pages/agent/alert/list";
+import AlertListPage from "@web/pages/agent/alert/list";
 import AlertDetailsPage from "@web/pages/agent/alert/details";
 
 export const routes: NavigationBranch = {
@@ -12,7 +12,7 @@ export const routes: NavigationBranch = {
 				{
 					name: "Listagem de Alertas",
 					path: "/agente/listagem-alertas",
-					page: ListAlertPage,
+					page: AlertListPage,
 					icon: AiOutlineUnorderedList({ size: 22 }),
 				},
 				{

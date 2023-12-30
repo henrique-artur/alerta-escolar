@@ -5,7 +5,7 @@ import ListSchools from "@web/pages/admin/school/list";
 import ListCops from "@web/pages/admin/cop/list";
 import CreateOrEditSchoolPage from "@web/pages/admin/school/create-or-edit";
 import CreateOrEditCopPage from "@web/pages/admin/cop/create-or-edit";
-import ListAlertPage from "@web/pages/agent/alert/list";
+import AlertListPage from "@web/pages/admin/alert/list";
 import AlertDetailsPage from "@web/pages/agent/alert/details";
 
 export const routes: NavigationBranch = {
@@ -48,7 +48,14 @@ export const routes: NavigationBranch = {
 					name: "Listar Alertas",
 					path: "/admin/listar-alerta",
 					icon: AiOutlineUnorderedList({ size: 22 }),
-					page: ListAlertPage,
+					page: AlertListPage,
+				},
+				{
+					name: "Detalhes do alerta",
+					path: "/admin/detalhes-alerta/:id",
+					icon: AiOutlineUnorderedList({ size: 22 }),
+					page: () => AlertDetailsPage({ isWebsocket: false }),
+					hidden: true,
 				},
 				{
 					name: "Sala de Alerta",
