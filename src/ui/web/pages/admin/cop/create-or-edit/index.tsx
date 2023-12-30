@@ -160,7 +160,7 @@ function CreateOrEditCopPage() {
 				<Row gutter={16}>
 					<Col span={16}>
 						<Form.Item
-							label="Nome da Escola"
+							label="Nome da Delegacia"
 							name="name"
 							required
 							rules={[
@@ -170,7 +170,7 @@ function CreateOrEditCopPage() {
 								},
 							]}
 						>
-							<Input type="text" name="school_name" />
+							<Input type="text" name="cop_name" />
 						</Form.Item>
 					</Col>
 					<Col span={8}>
@@ -181,7 +181,8 @@ function CreateOrEditCopPage() {
 							rules={[
 								{
 									required: true,
-									message: "Atribua um responsável à escola",
+									message:
+										"Atribua um responsável à delegacia",
 								},
 							]}
 						>
