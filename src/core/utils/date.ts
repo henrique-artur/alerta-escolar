@@ -107,3 +107,28 @@ function splitDateNumbers(date: string = ""): [string, string, string] | [] {
 	if (year) year = year.substring(0, 4);
 	return [day ?? "", month ?? "", year ?? ""];
 }
+
+export function formatDateWithTimeToView(timestamp?: string) {
+	if (!timestamp) return;
+	let date: string | undefined = undefined;
+	const timestampSplit = timestamp.split("T");
+	if (timestamp.includes("T")) date = timestampSplit[0];
+	if (!date) return;
+
+	let day = date.split("-")[2];
+	let month = date.split("-")[1];
+	const year = date.split("-")[0];
+
+	if (Number(day) < 10) {
+		day = `0${Number(day)}`;
+	}
+
+	if (Number(month) < 10) {
+		month = `0${Number(month)}`;
+	}
+
+	const formattedDate = `${day}/${month}/${year}`;
+	const time = timestampSplit[1].split("-")[0];
+
+	return `${formattedDate} às ${time}`;
+}

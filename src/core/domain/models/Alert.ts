@@ -4,6 +4,7 @@ import Responsible from "./Responsible";
 import School from "./School";
 import { Model } from "./model";
 import TypeIncident from "./TypeIncident";
+import { formatDateWithTimeToView } from "@utils/date";
 
 class Alert extends Model {
 	private _id: string;
@@ -15,10 +16,16 @@ class Alert extends Model {
 	private _description?: string;
 	private _problemSolving?: string;
 	private _responsible?: Responsible;
+	private _createdAt: string;
 
 	constructor() {
 		super();
-		this._id = this._description = this._status = this._problemSolving = "";
+		this._id =
+			this._description =
+			this._status =
+			this._problemSolving =
+			this._createdAt =
+				"";
 		this._teacher = this._responsible = new Responsible();
 		this._typeIncident = new TypeIncident();
 		this._cop = new Cop();
@@ -40,6 +47,7 @@ class Alert extends Model {
 		obj._responsible = json["responsible"]
 			? Responsible.fromJSON(json["responsible"] as DTO)
 			: undefined;
+		obj._createdAt = formatDateWithTimeToView(String(json["created_at"]))!;
 
 		return obj;
 	}
@@ -109,6 +117,10 @@ class Alert extends Model {
 
 	get responsible() {
 		return this._responsible;
+	}
+
+	get createdAt() {
+		return this._createdAt;
 	}
 }
 
