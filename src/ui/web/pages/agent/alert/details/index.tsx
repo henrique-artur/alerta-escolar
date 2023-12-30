@@ -62,7 +62,7 @@ function AlertDetailsPage({ isWebsocket = false }: Props) {
 						</Col>
 						<Col span={6}>
 							<Title className={styles.title} level={4}>
-								Professor Solicitante
+								Solicitante
 							</Title>
 							<Paragraph>{alert.teacher.name}</Paragraph>
 						</Col>
