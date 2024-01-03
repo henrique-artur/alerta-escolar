@@ -9,17 +9,21 @@ import CardInfo from "@web/components/CardInfo";
 import View from "@web/components/base/View";
 import { useAccount } from "@web/contexts/auth/hooks";
 import { useCallback } from "react";
-import { usePressPanicButton } from "@web/contexts/panicButton/hooks";
+import { useCreateRoom, usePressPanicButton } from "@web/contexts/panicButton/hooks";
 
 function PanicButtonPage() {
 	const { Text, Title } = Typography;
 	const navigate = useNavigate();
 	const account = useAccount();
 	const press = usePressPanicButton();
+	const createRoom = useCreateRoom()
 
 	const pressPanicButton = useCallback(async () => {
 		const result = await press();
-		if (result) navigate(`/professor/complemento-alerta/${result.id}`);
+		if (result) {
+			createRoom(result.id)
+			navigate(`/professor/complemento-alerta/${result.id}`);
+		}
 	}, []);
 
 	return (

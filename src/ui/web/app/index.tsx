@@ -14,6 +14,7 @@ import ResourcesProvider from "@web/contexts/resources/provider";
 import SchoolProvider from "@web/contexts/school/provider";
 import CopProvider from "@web/contexts/cop/provider";
 import PanicButtonProvider from "@web/contexts/panicButton/provider";
+import AudioProvider from "@web/contexts/audio/provider";
 
 interface Props {
 	showHeader?: boolean;
@@ -41,7 +42,9 @@ function AppConfigSetup({
 							<PanicButtonProvider
 								usecase={ViteDIContainer.getPanicButtonUseCase()}
 							>
-								{children}
+								<AudioProvider>
+									{children}
+								</AudioProvider>
 							</PanicButtonProvider>
 						</CopProvider>
 					</SchoolProvider>

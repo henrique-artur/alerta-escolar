@@ -10,7 +10,7 @@ interface Props {
 	roles?: Pagination<AccountRole>;
 	getAddressByZipCode(zipCode: string): Promise<Address | undefined>;
 	fetchCounties(queryParams?: Record<string, unknown>): Promise<void>;
-	counties?: Pagination<Countie>;
+	counties?: Countie[];
 	fetchTypeIncident(queryParams?: Record<string, unknown>): Promise<void>;
 	incidentTypes?: TypeIncident[];
 }

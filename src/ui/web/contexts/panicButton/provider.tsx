@@ -22,14 +22,22 @@ export default function PanicButtonProvider({
 	const panic = usePanic();
 	const [alerts, setAlerts] = useState<Pagination<Alert>>();
 	const [lastAlert, setLastAlert] = useState<Alert>();
+	const [newStatusAlert, setNewStatusAlert] = useState<string>()
 
 	useEffect(() => {
 		socket.emit("join_room");
-		socket.on("new_alert", (alert: DTO) =>
+		socket.on("new_alert", (alert: DTO) => {
+			socket.emit("join_room_alert", alert.id)
 			setLastAlert(Alert.fromJSON(alert))
+		}
 		);
 		socket.on("connect", () => console.log("Connect"));
 		socket.on("disconnect", () => console.log("Disconnect"));
+
+		socket.on("new_status", (menssagem) => {
+			setNewStatusAlert(menssagem)
+		})
+
 	}, [socket]);
 
 	const press = useCallback(async () => {
@@ -40,6 +48,24 @@ export default function PanicButtonProvider({
 				panic(err);
 			});
 	}, []);
+
+	const createRoom = useCallback((id: string) => {
+		socket.emit('create_room', id)
+	}, [])
+
+	const joinRoomAlert = useCallback((id: string) => {
+		socket.emit("join_room_alert", id)
+	}, [])
+
+	const updateStatusAlert = useCallback(async (value: Alert, status: string) => {
+		const data = {
+			"room": value.id,
+			"status": status
+		}
+		value.status = status
+		await update(value)
+		socket.emit("status_update", data)
+	}, [])
 
 	const getByID = useCallback(async (id: string) => {
 		return await usecase
@@ -73,11 +99,15 @@ export default function PanicButtonProvider({
 		<PanicButtonCTX.Provider
 			value={{
 				press,
+				createRoom,
 				getByID,
 				update,
 				fetch,
 				alerts,
 				lastAlert,
+				joinRoomAlert,
+				updateStatusAlert,
+				newStatusAlert
 			}}
 		>
 			{children}

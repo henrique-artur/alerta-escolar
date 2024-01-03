@@ -23,14 +23,15 @@ class ResourcesAPI extends BaseAPI implements ResourcesAdapter {
 
 	async fetchCounties(
 		queryParams: Record<string, unknown>
-	): Promise<Pagination<Countie>> {
-		const response = await this.client.get<DTO>("counties/get/list/all", {
+	): Promise<Countie[]> {
+		const response = await this.client.get<DTO[]>("counties/get/list/all", {
 			params: {
 				all: true,
 				...queryParams,
 			},
 		});
-		return Pagination.fromJSON(response.data, Countie.fromJSON);
+		return response.data.map(Countie.fromJSON);
+		//return Pagination.fromJSON(response.data, Countie.fromJSON);
 	}
 
 	async fetchTypeIncident(

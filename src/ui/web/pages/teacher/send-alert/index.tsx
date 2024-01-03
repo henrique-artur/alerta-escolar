@@ -10,6 +10,8 @@ import View from "@web/components/base/View";
 import { useAccount } from "@web/contexts/auth/hooks";
 import {
 	useGetAlertByID,
+	useJoinRoomAlert,
+	useNewStatusAlert,
 	useUpdateAlert,
 } from "@web/contexts/panicButton/hooks";
 import Alert from "@models/Alert";
@@ -27,11 +29,13 @@ function SendAlertPage() {
 	const getAlertByID = useGetAlertByID();
 	const fetchIncidentType = useFetchIncidentType();
 	const incidentTypes = useIncidentTypes();
+	const newStatusAlert = useNewStatusAlert();
 	const updateAlert = useUpdateAlert();
 	const { id } = useParams();
 	const [alert, setAlert] = useState<Alert>();
 	const [selectedTypeIncident, setSelectedTypeIncident] = useState<string>();
-
+	const joinRoomAlert = useJoinRoomAlert();
+	
 	useEffect(() => {
 		if (!!getAlertByID && id) {
 			getAlertByID(id).then((response) => {
@@ -42,6 +46,11 @@ function SendAlertPage() {
 		if (!incidentTypes && !!fetchIncidentType) {
 			fetchIncidentType();
 		}
+
+		if (id){
+			joinRoomAlert(id)
+		}
+
 	}, []);
 
 	const onFinish = useCallback(
@@ -61,6 +70,17 @@ function SendAlertPage() {
 	const incidentTypeSelected = useCallback((value: string) => {
 		setSelectedTypeIncident(value);
 	}, []);
+	
+	let correspondingLabel: string = '';
+
+	const statusFromAlertStatus = ALERT_STATUS.find(status => status.value === newStatusAlert);
+	const alertStatus = alert?.status;
+	
+	if (statusFromAlertStatus) {
+	  correspondingLabel = statusFromAlertStatus.label;
+	} else {
+	  correspondingLabel = ALERT_STATUS.find(status => status.value === alertStatus)?.label || 'Status Desconhecido';
+	}
 
 	return (
 		<View hiddenPageTitle className={styles.container}>
@@ -75,9 +95,7 @@ function SendAlertPage() {
 						<Text>Status do Alerta</Text>
 						<Text strong>
 							{
-								ALERT_STATUS.find(
-									(item) => item.value === alert?.status
-								)?.label
+								correspondingLabel
 							}
 						</Text>
 					</div>

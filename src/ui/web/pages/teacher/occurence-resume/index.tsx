@@ -8,7 +8,7 @@ import View from "@web/components/base/View";
 import MAlert from "@models/Alert";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useGetAlertByID } from "@web/contexts/panicButton/hooks";
+import { useGetAlertByID, useJoinRoomAlert, useNewStatusAlert } from "@web/contexts/panicButton/hooks";
 import { ALERT_STATUS } from "@utils/alertStatus";
 
 function OccurrenceResumePage() {
@@ -16,13 +16,28 @@ function OccurrenceResumePage() {
 	const { id } = useParams();
 	const [alert, setAlert] = useState<MAlert>();
 	const getAlertByID = useGetAlertByID();
-
+	const newStatusAlert = useNewStatusAlert();
+	const joinRoomAlert = useJoinRoomAlert()
 	useEffect(() => {
 		if (!alert && id && !!getAlertByID) {
 			getAlertByID(id).then((response) => response && setAlert(response));
 		}
+		
+		if (id){
+			joinRoomAlert(id)
+		}
 	}, []);
 
+	let correspondingLabel: string = '';
+
+	const statusFromAlertStatus = ALERT_STATUS.find(status => status.value === newStatusAlert);
+	const alertStatus = alert?.status;
+	
+	if (statusFromAlertStatus) {
+	  correspondingLabel = statusFromAlertStatus.label;
+	} else {
+	  correspondingLabel = ALERT_STATUS.find(status => status.value === alertStatus)?.label || 'Status Desconhecido';
+	}
 	return (
 		<View hiddenPageTitle className={styles.container}>
 			<img className={styles.appLogo} src={imgLogo} alt="Logo do app" />
@@ -39,9 +54,7 @@ function OccurrenceResumePage() {
 					<Text strong>Status</Text>
 					<Text>
 						{
-							ALERT_STATUS.find(
-								(item) => item.value === alert?.status
-							)?.label
+							correspondingLabel
 						}
 					</Text>
 				</div>

@@ -131,7 +131,7 @@ function CreateOrEditSchoolPage() {
 				const address = await getAddressByZipCode(value);
 				formRef.setFieldValue("publicArea", address?.publicArea);
 				formRef.setFieldValue("district", address?.district);
-				const countieID = counties?.results.find(
+				const countieID = counties?.find(
 					(item) => item.name === address?.location
 				)?.id;
 				formRef.setFieldValue("countie", countieID);
@@ -279,7 +279,7 @@ function CreateOrEditSchoolPage() {
 								defaultActiveFirstOption={false}
 								onSelect={handleCountieSelect}
 								value={countieSelected}
-								options={counties?.results.map((item) => ({
+								options={counties?.map((item) => ({
 									label: item.name,
 									value: item.id,
 								}))}

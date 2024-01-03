@@ -122,6 +122,10 @@ class Alert extends Model {
 	get createdAt() {
 		return this._createdAt;
 	}
+
+	set status(status: string){
+		this._status = status
+	}
 }
 
 export default Alert;
