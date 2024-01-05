@@ -5,7 +5,7 @@ import delmiroGouveiaLogo from "assets/images/delmiro-gouveia-logo.svg";
 import styles from "./styles.module.scss";
 import { useNavigate, useParams } from "react-router-dom";
 import CardInfo from "@web/components/CardInfo";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import View from "@web/components/base/View";
 import { useAccount } from "@web/contexts/auth/hooks";
 import {
@@ -33,9 +33,9 @@ function SendAlertPage() {
 	const updateAlert = useUpdateAlert();
 	const { id } = useParams();
 	const [alert, setAlert] = useState<Alert>();
-	const [selectedTypeIncident, setSelectedTypeIncident] = useState<string>();
+	const [_, setSelectedTypeIncident] = useState<string>();
 	const joinRoomAlert = useJoinRoomAlert();
-	
+
 	useEffect(() => {
 		if (!!getAlertByID && id) {
 			getAlertByID(id).then((response) => {
@@ -47,10 +47,9 @@ function SendAlertPage() {
 			fetchIncidentType();
 		}
 
-		if (id){
-			joinRoomAlert(id)
+		if (id) {
+			joinRoomAlert(id);
 		}
-
 	}, []);
 
 	const onFinish = useCallback(
@@ -70,17 +69,19 @@ function SendAlertPage() {
 	const incidentTypeSelected = useCallback((value: string) => {
 		setSelectedTypeIncident(value);
 	}, []);
-	
-	let correspondingLabel: string = '';
 
-	const statusFromAlertStatus = ALERT_STATUS.find(status => status.value === newStatusAlert);
-	const alertStatus = alert?.status;
-	
-	if (statusFromAlertStatus) {
-	  correspondingLabel = statusFromAlertStatus.label;
-	} else {
-	  correspondingLabel = ALERT_STATUS.find(status => status.value === alertStatus)?.label || 'Status Desconhecido';
-	}
+	const lastAlertStatus = useMemo(() => {
+		let statusValue = alert?.status;
+
+		if (newStatusAlert !== undefined) {
+			statusValue = newStatusAlert;
+		}
+
+		return (
+			ALERT_STATUS.find((item) => item.value === statusValue)?.label ??
+			"Status Desconhecido"
+		);
+	}, [alert, newStatusAlert]);
 
 	return (
 		<View hiddenPageTitle className={styles.container}>
@@ -93,11 +94,7 @@ function SendAlertPage() {
 					</div>
 					<div className={styles.infoBox}>
 						<Text>Status do Alerta</Text>
-						<Text strong>
-							{
-								correspondingLabel
-							}
-						</Text>
+						<Text strong>{lastAlertStatus}</Text>
 					</div>
 				</CardInfo>
 			) : (

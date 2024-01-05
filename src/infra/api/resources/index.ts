@@ -31,7 +31,6 @@ class ResourcesAPI extends BaseAPI implements ResourcesAdapter {
 			},
 		});
 		return response.data.map(Countie.fromJSON);
-		//return Pagination.fromJSON(response.data, Countie.fromJSON);
 	}
 
 	async fetchTypeIncident(

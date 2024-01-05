@@ -11,7 +11,7 @@ interface Props {
 	alerts?: Pagination<Alert>;
 	lastAlert?: Alert;
 	joinRoomAlert(id: string): void;
-	updateStatusAlert(value: Alert, status: string) : void;
+	updateStatusAlert(value: Alert, status: string): void;
 	newStatusAlert?: string;
 }
 
