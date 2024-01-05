@@ -1,4 +1,4 @@
-import { Typography } from "antd";
+import { Button, Typography } from "antd";
 import imgLogo from "assets/images/alerta-escolar-logo.svg";
 import radsLogo from "assets/images/rads-logo.svg";
 import delmiroGouveiaLogo from "assets/images/delmiro-gouveia-logo.svg";
@@ -6,8 +6,8 @@ import styles from "./styles.module.scss";
 import CardInfo from "@web/components/CardInfo";
 import View from "@web/components/base/View";
 import Alert from "@models/Alert";
-import { useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import {
 	useGetAlertByID,
 	useJoinRoomAlert,
@@ -18,19 +18,14 @@ import { ALERT_STATUS } from "@utils/alertStatus";
 function OccurrenceResumePage() {
 	const { Text } = Typography;
 	const { id } = useParams();
+	const navigate = useNavigate();
 	const [alert, setAlert] = useState<Alert>();
 	const getAlertByID = useGetAlertByID();
 	const newStatusAlert = useNewStatusAlert();
 	const joinRoomAlert = useJoinRoomAlert();
 
-	useEffect(() => {
-		if (!alert && id && !!getAlertByID) {
-			getAlertByID(id).then((response) => response && setAlert(response));
-		}
-
-		if (id) {
-			joinRoomAlert(id);
-		}
+	const returnToPanicButton = useCallback(() => {
+		navigate("/professor/botao-de-panico");
 	}, []);
 
 	const lastAlertStatus = useMemo(() => {
@@ -45,6 +40,16 @@ function OccurrenceResumePage() {
 			"Status Desconhecido"
 		);
 	}, [alert, newStatusAlert]);
+
+	useEffect(() => {
+		if (!alert && id && !!getAlertByID) {
+			getAlertByID(id).then((response) => response && setAlert(response));
+		}
+
+		if (id) {
+			joinRoomAlert(id);
+		}
+	}, []);
 
 	return (
 		<View hiddenPageTitle className={styles.container}>
@@ -72,7 +77,14 @@ function OccurrenceResumePage() {
 				</div>
 			</CardInfo>
 
-			{/* TODO: Add botão de voltar a tela inicial */}
+			<Button
+				type="primary"
+				block
+				size="large"
+				onClick={returnToPanicButton}
+			>
+				Voltar ao Botão de Alerta
+			</Button>
 
 			<footer>
 				<img
