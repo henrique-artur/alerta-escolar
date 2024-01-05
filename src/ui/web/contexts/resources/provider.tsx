@@ -14,7 +14,7 @@ interface Props {
 function ResourcesProvider({ usecase, children }: PropsWithChildren<Props>) {
 	const panic = usePanic();
 	const [roles, setRoles] = useState<Pagination<AccountRole>>();
-	const [counties, setCounties] = useState<Pagination<Countie>>();
+	const [counties, setCounties] = useState<Countie[]>();
 	const [incidentTypes, setIncidentTypes] = useState<TypeIncident[]>();
 
 	const fetch = useCallback(async () => {

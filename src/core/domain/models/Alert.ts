@@ -77,9 +77,15 @@ class Alert extends Model {
 
 	static fromForm(values: DTO): Alert {
 		const obj = new Alert();
-		obj._id = String(values["id"]);
-		obj._typeIncident!.id = String(values["type_incident"]);
-		obj._description = String(values["description"]);
+		values["id"] ? (obj._id = String(values["id"])) : undefined;
+		values["type_incident"]
+			? (obj._typeIncident!.id = String(values["type_incident"]))
+			: undefined;
+		values["description"]
+			? (obj._description = String(values["description"]))
+			: undefined;
+		values["status"] ? (obj._status = String(values["status"])) : undefined;
+
 		return obj;
 	}
 

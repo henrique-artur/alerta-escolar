@@ -5,11 +5,13 @@ import delmiroGouveiaLogo from "assets/images/delmiro-gouveia-logo.svg";
 import styles from "./styles.module.scss";
 import { useNavigate, useParams } from "react-router-dom";
 import CardInfo from "@web/components/CardInfo";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import View from "@web/components/base/View";
 import { useAccount } from "@web/contexts/auth/hooks";
 import {
 	useGetAlertByID,
+	useJoinRoomAlert,
+	useNewStatusAlert,
 	useUpdateAlert,
 } from "@web/contexts/panicButton/hooks";
 import Alert from "@models/Alert";
@@ -27,10 +29,12 @@ function SendAlertPage() {
 	const getAlertByID = useGetAlertByID();
 	const fetchIncidentType = useFetchIncidentType();
 	const incidentTypes = useIncidentTypes();
+	const newStatusAlert = useNewStatusAlert();
 	const updateAlert = useUpdateAlert();
 	const { id } = useParams();
 	const [alert, setAlert] = useState<Alert>();
-	const [selectedTypeIncident, setSelectedTypeIncident] = useState<string>();
+	const [_, setSelectedTypeIncident] = useState<string>();
+	const joinRoomAlert = useJoinRoomAlert();
 
 	useEffect(() => {
 		if (!!getAlertByID && id) {
@@ -41,6 +45,10 @@ function SendAlertPage() {
 
 		if (!incidentTypes && !!fetchIncidentType) {
 			fetchIncidentType();
+		}
+
+		if (id) {
+			joinRoomAlert(id);
 		}
 	}, []);
 
@@ -62,6 +70,19 @@ function SendAlertPage() {
 		setSelectedTypeIncident(value);
 	}, []);
 
+	const lastAlertStatus = useMemo(() => {
+		let statusValue = alert?.status;
+
+		if (newStatusAlert !== undefined) {
+			statusValue = newStatusAlert;
+		}
+
+		return (
+			ALERT_STATUS.find((item) => item.value === statusValue)?.label ??
+			"Status Desconhecido"
+		);
+	}, [alert, newStatusAlert]);
+
 	return (
 		<View hiddenPageTitle className={styles.container}>
 			<img className={styles.appLogo} src={imgLogo} alt="Logo do app" />
@@ -73,13 +94,7 @@ function SendAlertPage() {
 					</div>
 					<div className={styles.infoBox}>
 						<Text>Status do Alerta</Text>
-						<Text strong>
-							{
-								ALERT_STATUS.find(
-									(item) => item.value === alert?.status
-								)?.label
-							}
-						</Text>
+						<Text strong>{lastAlertStatus}</Text>
 					</div>
 				</CardInfo>
 			) : (

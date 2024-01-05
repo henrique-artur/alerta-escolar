@@ -24,3 +24,20 @@ export function useAlerts() {
 export function useLastAlert() {
 	return useContextSelector(PanicButtonCTX, (ctx) => ctx.lastAlert);
 }
+
+export function useCreateRoom() {
+	return useContextSelector(PanicButtonCTX, (ctx) => ctx.createRoom);
+}
+
+export function useJoinRoomAlert() {
+	return useContextSelector(PanicButtonCTX, (ctx) => ctx.joinRoomAlert);
+}
+
+export function useUpdateStatusAlert() {
+	return useContextSelector(PanicButtonCTX, (ctx) => ctx.updateStatusAlert);
+}
+
+export function useNewStatusAlert() {
+	return useContextSelector(PanicButtonCTX, (ctx) => ctx.newStatusAlert);
+}
+

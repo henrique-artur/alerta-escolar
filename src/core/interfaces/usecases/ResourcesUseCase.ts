@@ -9,7 +9,7 @@ abstract class ResourcesUseCase {
 	abstract getAddressByZipCode(zipCode: string): Promise<Address>;
 	abstract fetchCounties(
 		queryParams?: Record<string, unknown>
-	): Promise<Pagination<Countie>>;
+	): Promise<Countie[]>;
 	abstract fetchTypeIncident(
 		queryParams?: Record<string, unknown>
 	): Promise<TypeIncident[]>;

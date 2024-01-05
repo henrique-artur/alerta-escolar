@@ -18,7 +18,7 @@ class ResourcesService implements ResourcesUseCase {
 
 	async fetchCounties(
 		queryParams?: Record<string, unknown>
-	): Promise<Pagination<Countie>> {
+	): Promise<Countie[]> {
 		return this.adapter.fetchCounties(queryParams);
 	}
 
