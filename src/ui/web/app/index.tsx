@@ -42,9 +42,7 @@ function AppConfigSetup({
 							<PanicButtonProvider
 								usecase={ViteDIContainer.getPanicButtonUseCase()}
 							>
-								<AudioProvider>
-									{children}
-								</AudioProvider>
+								<AudioProvider>{children}</AudioProvider>
 							</PanicButtonProvider>
 						</CopProvider>
 					</SchoolProvider>
