@@ -25,6 +25,7 @@ export default function PanicButtonProvider({
 	const [alerts, setAlerts] = useState<Pagination<Alert>>();
 	const [lastAlert, setLastAlert] = useState<Alert>();
 	const [newStatusAlert, setNewStatusAlert] = useState<string>();
+	const [schoolSelected, setSchoolSelected] = useState<string>();
 
 	useEffect(() => {
 		socket.emit("join_room");
@@ -38,6 +39,8 @@ export default function PanicButtonProvider({
 		socket.on("new_status", (message) => {
 			setNewStatusAlert(message);
 		});
+
+		socket.on("update_list_alert", () => fetch());
 	}, [socket]);
 
 	const press = useCallback(async () => {
@@ -84,6 +87,18 @@ export default function PanicButtonProvider({
 		[]
 	);
 
+	const concludedAlert = useCallback(async (dto: Alert) => {
+		return await update(dto, () =>
+			socket.emit("update_item_in_list_alert")
+		);
+	}, []);
+
+	const updateResponsibleAlert = useCallback(async (dto: Alert) => {
+		return await update(dto, () =>
+			socket.emit("update_item_in_list_alert")
+		);
+	}, []);
+
 	const getByID = useCallback(async (id: string) => {
 		return await usecase
 			.getByID(id)
@@ -93,23 +108,39 @@ export default function PanicButtonProvider({
 			});
 	}, []);
 
-	const update = useCallback(async (dto: Alert) => {
+	const update = useCallback(async (dto: Alert, onSuccess?: () => void) => {
 		return await usecase
 			.update(dto)
-			.then((response) => response)
+			.then((response) => {
+				if (onSuccess) onSuccess();
+				return response;
+			})
 			.catch((err) => {
 				panic(err);
 			});
 	}, []);
 
-	const fetch = useCallback(async (queryParams?: Record<string, unknown>) => {
-		setAlerts(undefined);
-		return await usecase
-			.fetch(queryParams)
-			.then(setAlerts)
-			.catch((err) => {
-				panic(err);
-			});
+	const fetch = useCallback(
+		async (queryParams?: Record<string, unknown>) => {
+			setAlerts(undefined);
+			if (schoolSelected) {
+				queryParams = {
+					...queryParams,
+					school: schoolSelected,
+				};
+			}
+			return await usecase
+				.fetch({ ...queryParams })
+				.then(setAlerts)
+				.catch((err) => {
+					panic(err);
+				});
+		},
+		[schoolSelected]
+	);
+
+	const chooseSchool = useCallback((selectedSchool: string) => {
+		setSchoolSelected(selectedSchool);
 	}, []);
 
 	return (
@@ -125,6 +156,9 @@ export default function PanicButtonProvider({
 				joinRoomAlert,
 				updateStatusAlert,
 				newStatusAlert,
+				updateResponsibleAlert,
+				concludedAlert,
+				chooseSchool,
 			}}
 		>
 			{children}

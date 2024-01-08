@@ -13,6 +13,9 @@ interface Props {
 	joinRoomAlert(id: string): void;
 	updateStatusAlert(value: Alert, status: string): void;
 	newStatusAlert?: string;
+	updateResponsibleAlert(dto: Alert): Promise<Alert | void>;
+	concludedAlert(dto: Alert): Promise<Alert | void>;
+	chooseSchool(value: string): void;
 }
 
 export const PanicButtonCTX = createContext({} as Props);
