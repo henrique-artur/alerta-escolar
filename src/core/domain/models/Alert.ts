@@ -15,6 +15,7 @@ class Alert extends Model {
 	private _typeIncident?: TypeIncident;
 	private _description?: string;
 	private _problemSolving?: string;
+	private _concludedBy?: Responsible;
 	private _responsible?: Responsible;
 	private _createdAt: string;
 
@@ -26,7 +27,10 @@ class Alert extends Model {
 			this._problemSolving =
 			this._createdAt =
 				"";
-		this._teacher = this._responsible = new Responsible();
+		this._teacher =
+			this._responsible =
+			this._concludedBy =
+				new Responsible();
 		this._typeIncident = new TypeIncident();
 		this._cop = new Cop();
 		this._school = new School();
@@ -58,8 +62,8 @@ class Alert extends Model {
 		this._typeIncident?.id
 			? (json["type_incident"] = this._typeIncident?.id)
 			: undefined;
-		this.responsible?.id
-			? (json["concluded_by"] = this.responsible?.id)
+		this._concludedBy?.id
+			? (json["concluded_by"] = this._concludedBy?.id)
 			: undefined;
 		this._status ? (json["status"] = this._status) : undefined;
 		this._description
@@ -85,6 +89,16 @@ class Alert extends Model {
 			? (obj._description = String(values["description"]))
 			: undefined;
 		values["status"] ? (obj._status = String(values["status"])) : undefined;
+		values["responsible"]
+			? (obj._responsible!.id = String(values["responsible"]))
+			: undefined;
+		values["concluded_by"]
+			? (obj._concludedBy!.id = String(values["concluded_by"]))
+			: undefined;
+		values["problem_solving"]
+			? (values["problem_solving"] = obj._problemSolving =
+					String(values["problem_solving"]))
+			: undefined;
 
 		return obj;
 	}
