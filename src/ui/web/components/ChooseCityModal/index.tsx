@@ -45,7 +45,7 @@ function ChooseCityModal({}, ref: ForwardedRef<ChooseCityModalHandlers>) {
 			chooseCountie(citySelected);
 			setIsModalOpen(false);
 		} else {
-			panic("Escolha uma área de cobertura para monitorar.");
+			panic(new Error("Escolha uma área de cobertura para monitorar."));
 		}
 	}, [citySelected]);
 
