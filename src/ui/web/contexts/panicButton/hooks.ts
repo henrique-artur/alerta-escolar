@@ -52,6 +52,10 @@ export function useConcludedAlert() {
 	return useContextSelector(PanicButtonCTX, (ctx) => ctx.concludedAlert);
 }
 
-export function useChooseSchool() {
-	return useContextSelector(PanicButtonCTX, (ctx) => ctx.chooseSchool);
+export function useChooseCountie() {
+	return useContextSelector(PanicButtonCTX, (ctx) => ctx.chooseCountie);
+}
+
+export function useCountieSelected() {
+	return useContextSelector(PanicButtonCTX, (ctx) => ctx.countieSelected);
 }

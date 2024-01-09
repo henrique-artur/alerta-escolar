@@ -1,5 +1,5 @@
 import View from "@web/components/base/View";
-import { Col, Divider, Row, Select, Skeleton, Typography } from "antd";
+import { Col, Divider, Row, Skeleton, Typography } from "antd";
 import styles from "./styles.module.scss";
 import { Marker } from "react-leaflet";
 import Map from "@web/components/Map";
@@ -8,15 +8,14 @@ import {
 	useGetAlertByID,
 	useJoinRoomAlert,
 	useLastAlert,
-	useUpdateStatusAlert,
 } from "@web/contexts/panicButton/hooks";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Alert from "@models/Alert";
 import { LatLngExpression } from "leaflet";
 import { useToggleAudio } from "@web/contexts/audio/hooks";
 import { ALERT_STATUS } from "@utils/alertStatus";
-import { useChooseSchoolModal } from "@web/components/ChooseSchoolModal/hooks";
-import ChooseSchoolModal from "@web/components/ChooseSchoolModal";
+import { useChooseCityModal } from "@web/components/ChooseCityModal/hooks";
+import ChooseCityModal from "@web/components/ChooseCityModal";
 
 interface Props {
 	isWebsocket?: boolean;
@@ -28,11 +27,9 @@ function AlertDetailsPage({ isWebsocket = false }: Props) {
 	const lastAlert = useLastAlert();
 	const { id } = useParams();
 	const [alert, setAlert] = useState<Alert>();
-	const [statusSelected, setStatusSelected] = useState<string>("");
 	const toggle = useToggleAudio();
 	const joinRoomAlert = useJoinRoomAlert();
-	const updateStatusAlert = useUpdateStatusAlert();
-	const chooseSchoolModalRef = useChooseSchoolModal();
+	const chooseCityModalRef = useChooseCityModal();
 
 	useEffect(() => {
 		if (!!getAlertByID && id) {
@@ -40,7 +37,6 @@ function AlertDetailsPage({ isWebsocket = false }: Props) {
 			getAlertByID(id).then((response) => {
 				if (response) {
 					setAlert(response);
-					setStatusSelected(response.status);
 				}
 			});
 		}
@@ -48,25 +44,16 @@ function AlertDetailsPage({ isWebsocket = false }: Props) {
 		if (isWebsocket && lastAlert) {
 			setAlert(lastAlert);
 			joinRoomAlert(lastAlert.id);
-			setStatusSelected(lastAlert.status);
 			toggle();
 		}
 
 		if (isWebsocket) {
-			if (lastAlert){
+			if (lastAlert) {
 				return;
 			}
-			chooseSchoolModalRef.current.open();
+			chooseCityModalRef.current.open();
 		}
 	}, [id, lastAlert]);
-
-	const handleStatusSelect = useCallback(
-		(value: string) => {
-			setStatusSelected(value);
-			updateStatusAlert(alert!, value);
-		},
-		[alert]
-	);
 
 	const geolocation = useMemo(() => {
 		return alert?.school.geolocation
@@ -123,15 +110,13 @@ function AlertDetailsPage({ isWebsocket = false }: Props) {
 							<Title className={styles.title} level={4}>
 								Status da solicitação
 							</Title>
-							<Select
-								onSelect={handleStatusSelect}
-								defaultActiveFirstOption={false}
-								value={statusSelected}
-								options={ALERT_STATUS.map((item) => ({
-									label: item.label,
-									value: item.value,
-								}))}
-							/>
+							<Paragraph>
+								{
+									ALERT_STATUS.find(
+										(item) => item.value === alert.status
+									)?.label
+								}
+							</Paragraph>
 						</Col>
 					</Row>
 
@@ -169,7 +154,7 @@ function AlertDetailsPage({ isWebsocket = false }: Props) {
 			) : (
 				<Skeleton active />
 			)}
-			<ChooseSchoolModal ref={chooseSchoolModalRef} />
+			<ChooseCityModal ref={chooseCityModalRef} />
 		</View>
 	);
 }

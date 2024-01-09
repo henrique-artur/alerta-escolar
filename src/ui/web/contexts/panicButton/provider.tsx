@@ -25,7 +25,7 @@ export default function PanicButtonProvider({
 	const [alerts, setAlerts] = useState<Pagination<Alert>>();
 	const [lastAlert, setLastAlert] = useState<Alert>();
 	const [newStatusAlert, setNewStatusAlert] = useState<string>();
-	const [schoolSelected, setSchoolSelected] = useState<string>();
+	const [countieSelected, setCountieSelected] = useState<string>();
 
 	useEffect(() => {
 		socket.emit("join_room");
@@ -88,15 +88,24 @@ export default function PanicButtonProvider({
 	);
 
 	const concludedAlert = useCallback(async (dto: Alert) => {
-		return await update(dto, () =>
-			socket.emit("update_item_in_list_alert")
-		);
+		return await update(dto, (response) => {
+			socket.emit("status_update", {
+				room: response?.id,
+				status: response?.status,
+			});
+			socket.emit("update_item_in_list_alert");
+		});
 	}, []);
 
 	const updateResponsibleAlert = useCallback(async (dto: Alert) => {
-		return await update(dto, () =>
-			socket.emit("update_item_in_list_alert")
-		);
+		return await update(dto, (response) => {
+			socket.emit("status_update", {
+				room: response?.id,
+				status: response?.status,
+			});
+			socket.emit("update_item_in_list_alert");
+			setLastAlert(response);
+		});
 	}, []);
 
 	const getByID = useCallback(async (id: string) => {
@@ -108,25 +117,28 @@ export default function PanicButtonProvider({
 			});
 	}, []);
 
-	const update = useCallback(async (dto: Alert, onSuccess?: () => void) => {
-		return await usecase
-			.update(dto)
-			.then((response) => {
-				if (onSuccess) onSuccess();
-				return response;
-			})
-			.catch((err) => {
-				panic(err);
-			});
-	}, []);
+	const update = useCallback(
+		async (dto: Alert, onSuccess?: (response?: Alert) => void) => {
+			return await usecase
+				.update(dto)
+				.then((response) => {
+					if (onSuccess) onSuccess(response);
+					return response;
+				})
+				.catch((err) => {
+					panic(err);
+				});
+		},
+		[]
+	);
 
 	const fetch = useCallback(
 		async (queryParams?: Record<string, unknown>) => {
 			setAlerts(undefined);
-			if (schoolSelected) {
+			if (countieSelected) {
 				queryParams = {
 					...queryParams,
-					school: schoolSelected,
+					countie: countieSelected,
 				};
 			}
 			return await usecase
@@ -136,12 +148,12 @@ export default function PanicButtonProvider({
 					panic(err);
 				});
 		},
-		[schoolSelected]
+		[countieSelected]
 	);
 
-	const chooseSchool = useCallback((selectedSchool: string) => {
-		socket.emit("join_room_alert",selectedSchool)
-		setSchoolSelected(selectedSchool);
+	const chooseCountie = useCallback((selectedCountie: string) => {
+		socket.emit("join_room_alert", selectedCountie);
+		setCountieSelected(selectedCountie);
 	}, []);
 
 	return (
@@ -159,7 +171,8 @@ export default function PanicButtonProvider({
 				newStatusAlert,
 				updateResponsibleAlert,
 				concludedAlert,
-				chooseSchool,
+				chooseCountie,
+				countieSelected,
 			}}
 		>
 			{children}
