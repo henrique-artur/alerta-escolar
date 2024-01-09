@@ -140,6 +140,7 @@ export default function PanicButtonProvider({
 	);
 
 	const chooseSchool = useCallback((selectedSchool: string) => {
+		socket.emit("join_room_alert",selectedSchool)
 		setSchoolSelected(selectedSchool);
 	}, []);
 

@@ -53,6 +53,9 @@ function AlertDetailsPage({ isWebsocket = false }: Props) {
 		}
 
 		if (isWebsocket) {
+			if (lastAlert){
+				return;
+			}
 			chooseSchoolModalRef.current.open();
 		}
 	}, [id, lastAlert]);
