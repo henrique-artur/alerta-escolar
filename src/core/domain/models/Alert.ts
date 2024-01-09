@@ -27,10 +27,9 @@ class Alert extends Model {
 			this._problemSolving =
 			this._createdAt =
 				"";
-		this._teacher =
-			this._responsible =
-			this._concludedBy =
-				new Responsible();
+		this._teacher = new Responsible();
+		this._responsible = new Responsible();
+		this._concludedBy = new Responsible();
 		this._typeIncident = new TypeIncident();
 		this._cop = new Cop();
 		this._school = new School();
