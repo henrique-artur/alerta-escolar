@@ -7,4 +7,5 @@ export const ERROR_MESSAGES = {
 		"Erro de validação do formulário. Por favor, preencha os campos corretamente.",
 	CONFLICT:
 		"Os valores do formulário já existem no banco. Por favor, revise o formulário e envie novamente!",
+	UNAUTHORIZED: "Sua sessão expirou. Por favor, faça novamente o login.",
 } as const;

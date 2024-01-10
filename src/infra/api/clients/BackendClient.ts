@@ -38,7 +38,9 @@ BackendClient.interceptors.response.use(
 				formattedError = AppError.Unknown(message);
 				break;
 			case 403:
-				formattedError = AppError.Unauthorized(message);
+				formattedError = AppError.Unauthorized(
+					ERROR_MESSAGES.UNAUTHORIZED
+				);
 				break;
 			case 409:
 				formattedError = AppError.Conflict(ERROR_MESSAGES.CONFLICT);
