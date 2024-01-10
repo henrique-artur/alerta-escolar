@@ -256,6 +256,7 @@ function CreateUsersModal(
 								},
 								{
 									type: "email",
+									message: "Digite um e-mail válido",
 								},
 							]}
 						>
