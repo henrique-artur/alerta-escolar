@@ -5,4 +5,6 @@ export const ERROR_MESSAGES = {
 		"Não foi possível conectar aos nossos servidores. Por favor, tente novamente mais tarde.",
 	UNPROCESSIBLE_ENTITY:
 		"Erro de validação do formulário. Por favor, preencha os campos corretamente.",
+	CONFLICT:
+		"Os valores do formulário já existem no banco. Por favor, revise o formulário e envie novamente!",
 } as const;
