@@ -1,7 +1,7 @@
 import View from "@web/components/base/View";
 import { useNavigate } from "react-router-dom";
 import AlertList from "@web/components/AlertList";
-import { Button } from "antd";
+import { Button, Typography } from "antd";
 import { FaFilter } from "react-icons/fa";
 import { useModalFilter } from "@web/components/ModalFilter/hooks";
 import ModalFilter from "@web/components/ModalFilter";
@@ -14,6 +14,7 @@ import {
 import { useEffect } from "react";
 import ChooseCityModal from "@web/components/ChooseCityModal";
 import { useChooseCityModal } from "@web/components/ChooseCityModal/hooks";
+import { useCounties, useFetchCounties } from "@web/contexts/resources/hooks";
 
 function AlertListPage() {
 	const navigate = useNavigate();
@@ -22,16 +23,24 @@ function AlertListPage() {
 	const lastAlert = useLastAlert();
 	const countieSelected = useCountieSelected();
 	const chooseCityModalRef = useChooseCityModal();
+	const counties = useCounties();
+	const fetchCounties = useFetchCounties();
 
 	useEffect(() => {
 		if (lastAlert && !lastAlert.responsible) {
 			alertModalRef.current.open();
 		}
 
+		if (!counties && !!fetchCounties) {
+			fetchCounties();
+		}
+
 		if (!countieSelected) {
 			chooseCityModalRef.current.open();
 		}
-	}, [lastAlert, countieSelected]);
+	}, [lastAlert, countieSelected, counties]);
+
+	const { Paragraph } = Typography;
 
 	return (
 		<View
@@ -44,6 +53,21 @@ function AlertListPage() {
 				</Button>
 			}
 		>
+			{countieSelected && (
+				<Paragraph>
+					Sua Área de Cobertura Atual:{" "}
+					<Button
+						type="default"
+						onClick={() => chooseCityModalRef.current.open()}
+					>
+						{
+							counties?.find(
+								(item) => item.id === countieSelected
+							)?.name
+						}
+					</Button>
+				</Paragraph>
+			)}
 			<AlertList
 				detailsOnClick={(id) =>
 					navigate(`/agente/detalhes-alerta/${id}`)
