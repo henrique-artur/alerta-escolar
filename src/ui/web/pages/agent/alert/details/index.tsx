@@ -5,6 +5,7 @@ import { Marker } from "react-leaflet";
 import Map from "@web/components/Map";
 import { useParams } from "react-router-dom";
 import {
+	useCountieSelected,
 	useGetAlertByID,
 	useJoinRoomAlert,
 	useLastAlert,
@@ -29,6 +30,7 @@ function AlertDetailsPage({ isWebsocket = false }: Props) {
 	const [alert, setAlert] = useState<Alert>();
 	const toggle = useToggleAudio();
 	const joinRoomAlert = useJoinRoomAlert();
+	const countieSelected = useCountieSelected();
 	const chooseCityModalRef = useChooseCityModal();
 
 	useEffect(() => {
@@ -47,13 +49,10 @@ function AlertDetailsPage({ isWebsocket = false }: Props) {
 			toggle();
 		}
 
-		if (isWebsocket) {
-			if (lastAlert) {
-				return;
-			}
+		if (isWebsocket && !countieSelected) {
 			chooseCityModalRef.current.open();
 		}
-	}, [id, lastAlert]);
+	}, [id, lastAlert, countieSelected]);
 
 	const geolocation = useMemo(() => {
 		return alert?.school.geolocation
