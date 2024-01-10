@@ -1,10 +1,6 @@
 import { Button, Table } from "antd";
 import styles from "./styles.module.scss";
-import {
-	AiOutlineEdit,
-	AiOutlineInfoCircle,
-	AiOutlinePlus,
-} from "react-icons/ai";
+import { AiOutlineEdit, AiOutlinePlus } from "react-icons/ai";
 import { useCallback, useEffect } from "react";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import School from "@models/School";
@@ -66,9 +62,6 @@ function ListSchools() {
 					gap: ".4rem",
 				}}
 			>
-				<Button>
-					<AiOutlineInfoCircle size={20} />
-				</Button>
 				<Button
 					type="primary"
 					onClick={() => navigate(`/admin/editar-escola/${data.id}`)}

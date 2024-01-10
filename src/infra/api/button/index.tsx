@@ -27,7 +27,7 @@ class PanicButtonAPI extends BaseAPI implements PanicButtonAdapter {
 		queryParams?: Record<string, unknown>
 	): Promise<Pagination<Alert>> {
 		const response = await this.client.get("/button/get/list/all", {
-			params: { queryParams },
+			params: { ...queryParams },
 		});
 		return Pagination.fromJSON(response.data, Alert.fromJSON);
 	}

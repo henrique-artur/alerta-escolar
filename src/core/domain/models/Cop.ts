@@ -46,6 +46,7 @@ class Cop extends Model {
 
 	toJSON(): DTO {
 		const json = {} as DTO;
+		if (this.id) json["id"] = this._id;
 		json["name"] = this.name;
 		json["geolocation"] = this.geolocation;
 		json["address"] = this.address;

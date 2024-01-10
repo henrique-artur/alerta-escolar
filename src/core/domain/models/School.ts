@@ -35,6 +35,7 @@ class School extends Model {
 
 	toJSON(): DTO {
 		const json = {} as DTO;
+		if (this.id) json["id"] = this._id;
 		json["name"] = this._name;
 		json["address"] = this._address.toJSON();
 		json["geolocation"] = this._geolocation;

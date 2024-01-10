@@ -13,6 +13,10 @@ interface Props {
 	joinRoomAlert(id: string): void;
 	updateStatusAlert(value: Alert, status: string): void;
 	newStatusAlert?: string;
+	updateResponsibleAlert(dto: Alert): Promise<Alert | void>;
+	concludedAlert(dto: Alert): Promise<Alert | void>;
+	chooseCountie(value: string): void;
+	countieSelected?: string;
 }
 
 export const PanicButtonCTX = createContext({} as Props);

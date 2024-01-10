@@ -72,6 +72,7 @@ class Account extends Model {
 	toJSON(): DTO<unknown> {
 		const json = {} as DTO;
 
+		if (this._id) json["id"] = this._id;
 		json["full_name"] = this._name;
 		json["email"] = this._email;
 		json["phone"] = this._phone;

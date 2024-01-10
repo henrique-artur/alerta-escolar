@@ -41,3 +41,21 @@ export function useNewStatusAlert() {
 	return useContextSelector(PanicButtonCTX, (ctx) => ctx.newStatusAlert);
 }
 
+export function useUpdateResponsibleAlert() {
+	return useContextSelector(
+		PanicButtonCTX,
+		(ctx) => ctx.updateResponsibleAlert
+	);
+}
+
+export function useConcludedAlert() {
+	return useContextSelector(PanicButtonCTX, (ctx) => ctx.concludedAlert);
+}
+
+export function useChooseCountie() {
+	return useContextSelector(PanicButtonCTX, (ctx) => ctx.chooseCountie);
+}
+
+export function useCountieSelected() {
+	return useContextSelector(PanicButtonCTX, (ctx) => ctx.countieSelected);
+}

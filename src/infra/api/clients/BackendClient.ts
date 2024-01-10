@@ -35,13 +35,17 @@ BackendClient.interceptors.response.use(
 				) {
 					formattedError = AppError.Unknown(message);
 				}
-				formattedError = AppError.Unknown;
+				formattedError = AppError.Unknown(
+					message ?? ERROR_MESSAGES.UNEXPECTED
+				);
 				break;
 			case 403:
 				formattedError = AppError.Unauthorized(message);
 				break;
 			case 422:
-				formattedError = AppError.UnprocessableEntity(message);
+				formattedError = AppError.UnprocessableEntity(
+					ERROR_MESSAGES.UNPROCESSIBLE_ENTITY
+				);
 				break;
 			case 500:
 			case 501:
@@ -52,7 +56,9 @@ BackendClient.interceptors.response.use(
 				);
 				break;
 			default:
-				formattedError = AppError.Unknown;
+				formattedError = AppError.Unknown(
+					message ?? ERROR_MESSAGES.UNEXPECTED
+				);
 				break;
 		}
 		return Promise.reject(formattedError);

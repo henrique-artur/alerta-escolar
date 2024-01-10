@@ -1,10 +1,6 @@
 import { Button, Table } from "antd";
 import styles from "./styles.module.scss";
-import {
-	AiOutlineEdit,
-	AiOutlineInfoCircle,
-	AiOutlinePlus,
-} from "react-icons/ai";
+import { AiOutlineEdit, AiOutlinePlus } from "react-icons/ai";
 import CreateUserModal from "@web/components/CreateUserModal";
 import { useCreateUserModal } from "@web/components/CreateUserModal/hooks";
 import {
@@ -77,9 +73,6 @@ function ListUsers() {
 					gap: ".4rem",
 				}}
 			>
-				<Button>
-					<AiOutlineInfoCircle size={20} />
-				</Button>
 				<Button
 					type="primary"
 					onClick={() => createUserModalRef.current.open(data)}
