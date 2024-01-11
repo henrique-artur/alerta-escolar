@@ -8,9 +8,7 @@ import { io } from "socket.io-client";
 import { DTO } from "@typing/http";
 import { useNotification } from "../common/notification/hooks";
 
-const socket = io(process.env.VITE_WEBSOCKET_URL ?? "", {
-	transports: ["websocket"],
-});
+const socket = io(process.env.VITE_WEBSOCKET_URL ?? "");
 
 interface Props {
 	usecase: PanicButtonUseCase;
