@@ -1,4 +1,7 @@
 import { AiOutlineUnorderedList, AiTwotoneAlert } from "react-icons/ai";
+import { MdOutlineSchool } from "react-icons/md";
+import { FaUsersBetweenLines } from "react-icons/fa6";
+import { GiPoliceOfficerHead } from "react-icons/gi";
 import { NavigationBranch } from "../types";
 import ListUsers from "@web/pages/admin/list-users";
 import ListSchools from "@web/pages/admin/school/list";
@@ -17,13 +20,13 @@ export const routes: NavigationBranch = {
 				{
 					name: "Listar Usuário",
 					path: "/admin/listar-usuarios",
-					icon: AiOutlineUnorderedList({ size: 22 }),
+					icon: FaUsersBetweenLines({ size: 22 }),
 					page: ListUsers,
 				},
 				{
 					name: "Listar Escolas",
 					path: "/admin/listar-escolas",
-					icon: AiOutlineUnorderedList({ size: 22 }),
+					icon: MdOutlineSchool({ size: 22 }),
 					page: ListSchools,
 				},
 				{
@@ -41,7 +44,7 @@ export const routes: NavigationBranch = {
 				{
 					name: "Listar Centrais",
 					path: "/admin/listar-centrais",
-					icon: AiOutlineUnorderedList({ size: 22 }),
+					icon: GiPoliceOfficerHead({ size: 22 }),
 					page: ListCops,
 				},
 				{
