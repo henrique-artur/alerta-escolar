@@ -1,7 +1,7 @@
 import { Button, Form, Input, Select, Skeleton, Typography } from "antd";
 import imgLogo from "assets/images/alerta-escolar-logo.svg";
 import radsLogo from "assets/images/rads-logo.svg";
-import delmiroGouveiaLogo from "assets/images/delmiro-gouveia-logo.svg";
+import mataGrandeLogo from "assets/images/mata-grande-logo.png";
 import styles from "./styles.module.scss";
 import { useNavigate, useParams } from "react-router-dom";
 import CardInfo from "@web/components/CardInfo";
@@ -154,7 +154,7 @@ function SendAlertPage() {
 				/>
 				<img
 					style={{ width: 150 }}
-					src={delmiroGouveiaLogo}
+					src={mataGrandeLogo}
 					alt="imagem da logo da prefeitura de Delmiro Gouveia"
 				/>
 			</footer>

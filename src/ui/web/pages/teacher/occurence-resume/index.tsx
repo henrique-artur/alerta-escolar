@@ -1,7 +1,7 @@
 import { Button, Typography } from "antd";
 import imgLogo from "assets/images/alerta-escolar-logo.svg";
 import radsLogo from "assets/images/rads-logo.svg";
-import delmiroGouveiaLogo from "assets/images/delmiro-gouveia-logo.svg";
+import mataGrandeLogo from "assets/images/mata-grande-logo.png";
 import styles from "./styles.module.scss";
 import CardInfo from "@web/components/CardInfo";
 import View from "@web/components/base/View";
@@ -94,7 +94,7 @@ function OccurrenceResumePage() {
 				/>
 				<img
 					style={{ width: 150 }}
-					src={delmiroGouveiaLogo}
+					src={mataGrandeLogo}
 					alt="imagem da logo da prefeitura de Delmiro Gouveia"
 				/>
 			</footer>

@@ -1,6 +1,6 @@
 import appLogo from "assets/images/alerta-escolar-logo.svg";
 import radsLogo from "assets/images/rads-logo.svg";
-import delmiroGouveiaLogo from "assets/images/delmiro-gouveia-logo.svg";
+import mataGrandeLogo from "assets/images/mata-grande-logo.png";
 import styles from "./styles.module.scss";
 import { Button, Form, Input } from "antd";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
@@ -100,7 +100,7 @@ function LoginPage() {
 					/>
 					<img
 						style={{ width: 200 }}
-						src={delmiroGouveiaLogo}
+						src={mataGrandeLogo}
 						alt="imagem da logo da prefeitura de Delmiro Gouveia"
 					/>
 				</footer>
