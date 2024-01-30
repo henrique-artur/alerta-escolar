@@ -25,7 +25,7 @@ import {
 } from "@web/contexts/resources/hooks";
 import { Marker, useMapEvents } from "react-leaflet";
 import Address from "@models/Address";
-import { markerIcon } from "@web/components/MarkerIcon";
+import { housingIcon, markerIcon } from "@web/components/MarkerIcon";
 
 function CreateOrEditSchoolPage() {
 	const responsibles = useUsers();
@@ -110,7 +110,7 @@ function CreateOrEditSchoolPage() {
 		});
 
 		return position === undefined ? undefined : (
-			<Marker icon={markerIcon} position={position}></Marker>
+			<Marker icon={housingIcon} position={position}></Marker>
 		);
 	}, [position]);
 

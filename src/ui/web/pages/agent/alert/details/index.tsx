@@ -17,7 +17,7 @@ import { useToggleAudio } from "@web/contexts/audio/hooks";
 import { ALERT_STATUS } from "@utils/alertStatus";
 import { useChooseCityModal } from "@web/components/ChooseCityModal/hooks";
 import ChooseCityModal from "@web/components/ChooseCityModal";
-import { markerIcon } from "@web/components/MarkerIcon";
+import { housingIcon, markerIcon } from "@web/components/MarkerIcon";
 
 interface Props {
 	isWebsocket?: boolean;
@@ -146,7 +146,7 @@ function AlertDetailsPage({ isWebsocket = false }: Props) {
 					>
 						<Col span={24}>
 							<Map center={geolocation} zoom={15}>
-								<Marker icon={markerIcon} position={geolocation} />
+								<Marker icon={housingIcon} position={geolocation} />
 							</Map>
 						</Col>
 					</Row>
