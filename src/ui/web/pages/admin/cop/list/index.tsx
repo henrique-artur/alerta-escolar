@@ -60,7 +60,7 @@ function ListCops() {
 				<Button
 					type="primary"
 					onClick={() =>
-						navigate(`/admin/editar-delegacia/${data.id}`)
+						navigate(`/admin/editar-central/${data.id}`)
 					}
 				>
 					<AiOutlineEdit size={20} />
@@ -90,7 +90,7 @@ function ListCops() {
 				<Button
 					size="large"
 					className={styles.addButton}
-					onClick={() => navigate("/admin/criar-delegacia")}
+					onClick={() => navigate("/admin/criar-central")}
 				>
 					<AiOutlinePlus size={20} />
 					Adicionar
@@ -107,7 +107,7 @@ function ListCops() {
 				}}
 			/>
 			<EraseConfirmModal
-				title="Deletar Delegacia"
+				title="Deletar central"
 				handleOk={erase}
 				ref={eraseConfirmModalRef}
 			/>

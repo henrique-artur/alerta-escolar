@@ -95,7 +95,7 @@ function CreateOrEditCopPage() {
 					id: copID,
 				})
 			);
-			if (isOk) navigate("/admin/listar-delegacias");
+			if (isOk) navigate("/admin/listar-centrais");
 		},
 		[copID, address, position]
 	);
@@ -160,7 +160,7 @@ function CreateOrEditCopPage() {
 				<Row gutter={16}>
 					<Col span={16}>
 						<Form.Item
-							label="Nome da Delegacia"
+							label="Nome da central"
 							name="name"
 							required
 							rules={[
@@ -182,7 +182,7 @@ function CreateOrEditCopPage() {
 								{
 									required: true,
 									message:
-										"Atribua um responsável à delegacia",
+										"Atribua um responsável à central",
 								},
 							]}
 						>

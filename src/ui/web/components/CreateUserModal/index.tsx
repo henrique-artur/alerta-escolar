@@ -188,13 +188,13 @@ function CreateUsersModal(
 				return (
 					<Col span={24}>
 						<Form.Item
-							label="Delegacia"
+							label="Centrais"
 							name="cops"
 							required
 							rules={[
 								{
 									required: true,
-									message: "Atribua uma delegacia ao usuário",
+									message: "Atribua uma central ao usuário",
 								},
 							]}
 						>
