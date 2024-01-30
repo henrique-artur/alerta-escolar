@@ -1,6 +1,7 @@
 import Address from "@models/Address";
 import Cop from "@models/Cop";
 import Map from "@web/components/Map";
+import { markerIcon } from "@web/components/MarkerIcon";
 import View from "@web/components/base/View";
 import {
 	useCreateCop,
@@ -109,7 +110,7 @@ function CreateOrEditCopPage() {
 		});
 
 		return position === undefined ? undefined : (
-			<Marker position={position}></Marker>
+			<Marker icon={markerIcon} position={position}></Marker>
 		);
 	}, [position]);
 
