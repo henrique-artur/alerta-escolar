@@ -9,6 +9,7 @@ import {
 	useGetAlertByID,
 	useJoinRoomAlert,
 	useLastAlert,
+	useNewStatusAlert,
 } from "@web/contexts/panicButton/hooks";
 import { useEffect, useMemo, useState } from "react";
 import Alert from "@models/Alert";
@@ -29,11 +30,12 @@ function AlertDetailsPage({ isWebsocket = false }: Props) {
 	const lastAlert = useLastAlert();
 	const { id } = useParams();
 	const [alert, setAlert] = useState<Alert>();
-	const toggle = useToggleAudio();
+	const toggle:(value: boolean)=> void = useToggleAudio();
 	const joinRoomAlert = useJoinRoomAlert();
 	const countieSelected = useCountieSelected();
 	const chooseCityModalRef = useChooseCityModal();
-
+	const newStatusAlert = useNewStatusAlert();
+	
 	useEffect(() => {
 		if (!!getAlertByID && id) {
 			joinRoomAlert(id);
@@ -47,9 +49,12 @@ function AlertDetailsPage({ isWebsocket = false }: Props) {
 		if (isWebsocket && lastAlert) {
 			setAlert(lastAlert);
 			joinRoomAlert(lastAlert.id);
-			toggle();
+			toggle(true);
 		}
-
+		if (lastAlert?.responsible){
+			toggle(false)
+		}
+		console.log(newStatusAlert)
 		if (isWebsocket && !countieSelected) {
 			chooseCityModalRef.current.open();
 		}
@@ -61,6 +66,20 @@ function AlertDetailsPage({ isWebsocket = false }: Props) {
 			.map(Number) as LatLngExpression;
 	}, [alert]);
 
+	const lastAlertStatus = useMemo(() => {
+		let statusValue = alert?.status;
+
+		if (newStatusAlert !== undefined) {
+			statusValue = newStatusAlert;
+			toggle(false);
+		}
+
+		return (
+			ALERT_STATUS.find((item) => item.value === statusValue)?.label ??
+			"Status Desconhecido"
+		);
+	}, [alert, newStatusAlert]);
+	
 	return (
 		<View showBackButton>
 			{alert ? (
@@ -111,11 +130,7 @@ function AlertDetailsPage({ isWebsocket = false }: Props) {
 								Status da solicitação
 							</Title>
 							<Paragraph>
-								{
-									ALERT_STATUS.find(
-										(item) => item.value === alert.status
-									)?.label
-								}
+								{lastAlertStatus}
 							</Paragraph>
 						</Col>
 					</Row>

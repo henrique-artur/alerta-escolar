@@ -11,13 +11,14 @@ function AudioProvider({ children }: PropsWithChildren) {
 	}, [playing]);
 
 	useEffect(() => {
+		audio.loop = true;
 		audio.addEventListener("ended", () => setPlaying(false));
 		return () => {
 			audio.removeEventListener("ended", () => setPlaying(false));
 		};
 	}, []);
 
-	const toggle = () => setPlaying(!playing);
+	const toggle = (value: boolean) => setPlaying(value);
 
 	return (
 		<AudioCTX.Provider

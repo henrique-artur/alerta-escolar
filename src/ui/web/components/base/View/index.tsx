@@ -1,9 +1,10 @@
-import { PropsWithChildren, ReactNode } from "react";
+import { PropsWithChildren, ReactNode, useCallback } from "react";
 import styles from "./styles.module.scss";
 import { useCurrentRouteProps } from "@web/contexts/common/navigator/hooks";
 import { Button } from "antd";
 import { IoArrowBack } from "react-icons/io5";
 import classNames from "classnames";
+import { usePlayingAudio, useToggleAudio } from "@web/contexts/audio/hooks";
 
 interface Props {
 	rightButton?: ReactNode;
@@ -20,6 +21,14 @@ function View({
 	className,
 }: PropsWithChildren<Props>) {
 	const currentRoute = useCurrentRouteProps();
+	const toggle = useToggleAudio();
+	const audioPlaying =  usePlayingAudio();
+	
+	const handleBack = useCallback(()=>{
+		toggle(false)
+		console.log(audioPlaying)
+		history.back()
+	},[])
 
 	return (
 		<div id={styles.container}>
@@ -30,7 +39,7 @@ function View({
 							<Button
 								icon={<IoArrowBack size={22} />}
 								type="primary"
-								onClick={() => history.back()}
+								onClick={handleBack}
 							/>
 						)}
 						{!hiddenPageTitle && <h3>{currentRoute?.name}</h3>}

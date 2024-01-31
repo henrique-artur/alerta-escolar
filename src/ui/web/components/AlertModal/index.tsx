@@ -2,7 +2,7 @@ import {
 	useLastAlert,
 	useUpdateResponsibleAlert,
 } from "@web/contexts/panicButton/hooks";
-import { Col, Modal, Row, Typography } from "antd";
+import { Col, Modal, Row, Typography, Button } from "antd";
 import {
 	ForwardedRef,
 	forwardRef,
@@ -13,6 +13,7 @@ import {
 import styles from "./styles.module.scss";
 import Alert from "@models/Alert";
 import { useAccount } from "@web/contexts/auth/hooks";
+import { useToggleAudio } from "@web/contexts/audio/hooks";
 
 export interface AlertModalHandlers {
 	open(): void;
@@ -30,7 +31,7 @@ function AlertModal(
 	const alert = useLastAlert();
 	const getAlert = useUpdateResponsibleAlert();
 	const account = useAccount();
-
+	const toggle = useToggleAudio();
 	const open = useCallback(() => {
 		setIsOpen(true);
 	}, []);
@@ -42,6 +43,7 @@ function AlertModal(
 	}, []);
 
 	const onOk = useCallback(async () => {
+		toggle(false);
 		await getAlert(
 			Alert.fromForm({
 				id: alert?.id,
@@ -58,11 +60,13 @@ function AlertModal(
 		<Modal
 			width={700}
 			title="Alerta Emitido"
+			closable={false}
 			open={isOpen}
-			onCancel={close}
-			okText="Pegar Alerta"
-			cancelText="Cancelar"
-			onOk={onOk}
+			footer={[
+				<Button key="submit" type="primary" onClick={onOk}>
+					Pegar Alerta
+				</Button>
+			  ]}
 		>
 			<Row gutter={16}>
 				<Col span={6}>

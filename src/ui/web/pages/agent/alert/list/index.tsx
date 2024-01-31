@@ -15,6 +15,7 @@ import { useEffect } from "react";
 import ChooseCityModal from "@web/components/ChooseCityModal";
 import { useChooseCityModal } from "@web/components/ChooseCityModal/hooks";
 import { useCounties, useFetchCounties } from "@web/contexts/resources/hooks";
+import { useToggleAudio } from "@web/contexts/audio/hooks";
 
 function AlertListPage() {
 	const navigate = useNavigate();
@@ -25,10 +26,12 @@ function AlertListPage() {
 	const chooseCityModalRef = useChooseCityModal();
 	const counties = useCounties();
 	const fetchCounties = useFetchCounties();
+	const toggle = useToggleAudio();
 
 	useEffect(() => {
 		if (lastAlert && !lastAlert.responsible) {
 			alertModalRef.current.open();
+			toggle(true)
 		}
 
 		if (!counties && !!fetchCounties) {
