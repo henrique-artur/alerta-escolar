@@ -42,7 +42,6 @@ function AlertDetailsPage({ isWebsocket = false }: Props) {
 			getAlertByID(id).then((response) => {
 				if (response) {
 					setAlert(response);
-					toggle(true);
 				}
 			});
 		}
