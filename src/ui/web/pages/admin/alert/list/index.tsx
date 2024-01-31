@@ -1,10 +1,13 @@
 import AlertList from "@web/components/AlertList";
+import AlertModal from "@web/components/AlertModal";
+import { useAlertModal } from "@web/components/AlertModal/hooks";
 import ChooseCityModal from "@web/components/ChooseCityModal";
 import { useChooseCityModal } from "@web/components/ChooseCityModal/hooks";
 import ModalFilter from "@web/components/ModalFilter";
 import { useModalFilter } from "@web/components/ModalFilter/hooks";
 import View from "@web/components/base/View";
-import { useCountieSelected } from "@web/contexts/panicButton/hooks";
+import { useToggleAudio } from "@web/contexts/audio/hooks";
+import { useCountieSelected, useLastAlert } from "@web/contexts/panicButton/hooks";
 import { useCounties, useFetchCounties } from "@web/contexts/resources/hooks";
 import { Button, Typography } from "antd";
 import { useEffect } from "react";
@@ -15,11 +18,18 @@ function AlertListPage() {
 	const navigate = useNavigate();
 	const modalFilterRef = useModalFilter();
 	const countieSelected = useCountieSelected();
+	const lastAlert = useLastAlert();
+	const alertModalRef = useAlertModal();
 	const chooseCityModalRef = useChooseCityModal();
 	const fetchCounties = useFetchCounties();
 	const counties = useCounties();
-
+	const toggle = useToggleAudio();
 	useEffect(() => {
+		if (lastAlert && !lastAlert.responsible) {
+			alertModalRef.current.open();
+			toggle(true)
+		}
+
 		if (!countieSelected) {
 			chooseCityModalRef.current.open();
 		}
@@ -27,7 +37,7 @@ function AlertListPage() {
 		if (!counties && !!fetchCounties) {
 			fetchCounties();
 		}
-	}, [countieSelected, counties]);
+	}, [lastAlert,countieSelected, counties]);
 
 	const { Paragraph } = Typography;
 
@@ -61,6 +71,12 @@ function AlertListPage() {
 				detailsOnClick={(id) =>
 					navigate(`/admin/detalhes-alerta/${id}`)
 				}
+			/>
+			<AlertModal
+				detailsOnClick={(id) =>
+					navigate(`/admin/detalhes-alerta/${id}`)
+				}
+				ref={alertModalRef}
 			/>
 			<ModalFilter ref={modalFilterRef} />
 			<ChooseCityModal ref={chooseCityModalRef} />

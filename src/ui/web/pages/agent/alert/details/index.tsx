@@ -3,7 +3,7 @@ import { Col, Divider, Row, Skeleton, Typography } from "antd";
 import styles from "./styles.module.scss";
 import { Marker } from "react-leaflet";
 import Map from "@web/components/Map";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
 	useCountieSelected,
 	useGetAlertByID,
@@ -42,6 +42,7 @@ function AlertDetailsPage({ isWebsocket = false }: Props) {
 			getAlertByID(id).then((response) => {
 				if (response) {
 					setAlert(response);
+					toggle(true);
 				}
 			});
 		}
@@ -54,7 +55,7 @@ function AlertDetailsPage({ isWebsocket = false }: Props) {
 		if (lastAlert?.responsible){
 			toggle(false)
 		}
-		console.log(newStatusAlert)
+
 		if (isWebsocket && !countieSelected) {
 			chooseCityModalRef.current.open();
 		}
@@ -66,14 +67,23 @@ function AlertDetailsPage({ isWebsocket = false }: Props) {
 			.map(Number) as LatLngExpression;
 	}, [alert]);
 
+	useEffect(()=>{
+		if (newStatusAlert && isWebsocket){
+			setAlert(undefined);
+		}
+
+	},[newStatusAlert])
 	const lastAlertStatus = useMemo(() => {
 		let statusValue = alert?.status;
 
 		if (newStatusAlert !== undefined) {
 			statusValue = newStatusAlert;
-			toggle(false);
 		}
 
+		if (newStatusAlert === 'ajuda_caminho'){
+			toggle(false);
+		}
+		
 		return (
 			ALERT_STATUS.find((item) => item.value === statusValue)?.label ??
 			"Status Desconhecido"

@@ -26,7 +26,6 @@ function View({
 	
 	const handleBack = useCallback(()=>{
 		toggle(false)
-		console.log(audioPlaying)
 		history.back()
 	},[])
 
