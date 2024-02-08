@@ -45,7 +45,7 @@ function CreateUsersModal(
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [ID, setID] = useState<string>();
 	const [roleSelected, setRoleSelected] = useState<string>();
-	const [schoolSelected, setSchoolSelected] = useState<string>();
+	const [schoolSelected, setSchoolSelected] = useState<string[]>();
 	const [copsSelected, setCopsSelected] = useState<string>();
 	const [formRef] = useForm();
 	const fetchRoles = useFetchRoles();
@@ -75,12 +75,13 @@ function CreateUsersModal(
 
 	const open = useCallback((data?: Account) => {
 		if (data) {
+			const schoolIds = data?.school.map(school => school.id);
 			formRef.setFieldValue("full_name", data.name);
 			formRef.setFieldValue("email", data.email);
 			formRef.setFieldValue("roles", data.role[0].id);
 			setRoleSelected(data.role[0].id);
 			if (data.role[0].code === "TEACHER")
-				formRef.setFieldValue("schools", data?.school[0]?.id);
+				formRef.setFieldValue("schools", schoolIds);
 			if (data.role[0].code === "AGENT")
 				formRef.setFieldValue("cops", data?.cops[0].id);
 			formRef.setFieldValue("phone", data.phone);
@@ -127,7 +128,7 @@ function CreateUsersModal(
 		setRoleSelected(value);
 	}, []);
 
-	const handleSchoolSelect = useCallback((value: string) => {
+	const handleSchoolSelect = useCallback((value: string[]) => {
 		setSchoolSelected(value);
 	}, []);
 
@@ -173,9 +174,10 @@ function CreateUsersModal(
 							]}
 						>
 							<Select
-								onSelect={handleSchoolSelect}
+								mode="multiple"
+								onChange={handleSchoolSelect}
 								defaultActiveFirstOption={false}
-								value={schoolSelected}
+								defaultValue={schoolSelected}
 								options={scholls?.results.map((item) => ({
 									label: item.name,
 									value: item.id,

@@ -3,6 +3,7 @@ import { PropsWithChildren, useCallback, useEffect, useState } from "react";
 import { PanicButtonCTX } from ".";
 import { usePanic } from "../auth/hooks";
 import Alert from "@models/Alert";
+import School from "@models/School";
 import Pagination from "@models/pagination";
 import { io } from "socket.io-client";
 import { DTO } from "@typing/http";
@@ -41,9 +42,9 @@ export default function PanicButtonProvider({
 		socket.on("update_list_alert", () => fetch());
 	}, [socket]);
 
-	const press = useCallback(async () => {
+	const press = useCallback(async (schoolID: string) => {
 		return await usecase
-			.press()
+			.press(schoolID)
 			.then((response) => {
 				notification.success({
 					message: "Seu alerta foi enviado com sucesso!",

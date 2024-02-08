@@ -3,7 +3,7 @@ import Pagination from "@models/pagination";
 import { createContext } from "use-context-selector";
 
 interface Props {
-	press(): Promise<Alert | void>;
+	press(schoolID: string): Promise<Alert | void>;
 	createRoom(id: string): void;
 	getByID(id: string): Promise<Alert | void>;
 	update(dto: Alert): Promise<Alert | void>;

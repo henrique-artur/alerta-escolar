@@ -87,11 +87,7 @@ function SendAlertPage() {
 		<View hiddenPageTitle className={styles.container}>
 			<img className={styles.appLogo} src={imgLogo} alt="Logo do app" />
 			{alert ? (
-				<CardInfo title={"Informações da Escola"}>
-					<div className={styles.infoBox}>
-						<Text>Escola</Text>
-						<Text strong>{account?.school[0].name}</Text>
-					</div>
+				<CardInfo title={"Informações do Alerta"}>
 					<div className={styles.infoBox}>
 						<Text>Status do Alerta</Text>
 						<Text strong>{lastAlertStatus}</Text>

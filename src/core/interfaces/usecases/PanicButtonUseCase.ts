@@ -1,8 +1,9 @@
 import Alert from "@models/Alert";
+import School from "@models/School";
 import Pagination from "@models/pagination";
 
 abstract class PanicButtonUseCase {
-	abstract press(): Promise<Alert>;
+	abstract press(schoolID: string): Promise<Alert>;
 	abstract getByID(id: string): Promise<Alert>;
 	abstract update(dto: Alert): Promise<Alert>;
 	abstract fetch(

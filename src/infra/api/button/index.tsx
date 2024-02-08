@@ -1,12 +1,13 @@
 import PanicButtonAdapter from "@interfaces/adapters/PanicButtonAdapter";
 import BaseAPI from "..";
 import Alert from "@models/Alert";
+import School from "@models/School";
 import { DTO } from "@typing/http";
 import Pagination from "@models/pagination";
 
 class PanicButtonAPI extends BaseAPI implements PanicButtonAdapter {
-	async press(): Promise<Alert> {
-		const response = await this.client.post("/button/create/");
+	async press(schoolID: string): Promise<Alert> {
+		const response = await this.client.post(`/button/create/${schoolID}`);
 		return Alert.fromJSON(response.data);
 	}
 

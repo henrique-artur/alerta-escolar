@@ -59,7 +59,7 @@ class Account extends Model {
 		obj._whatsapp = String(data["whatsapp"]);
 		obj._cops = !!data["cops"] ? ([data["cops"]] as Cop[]) : [];
 		obj._school = !!data["schools"]
-			? ([data["schools"]] as School[])
+			? (data["schools"] as School[])
 			: ([] as School[]);
 		obj._role = !!data["roles"]
 			? ([data["roles"]] as AccountRole[])
