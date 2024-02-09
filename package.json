@@ -19,7 +19,7 @@
 		"react-icons": "^4.12.0",
 		"react-leaflet": "^4.2.1",
 		"react-router-dom": "^6.18.0",
-		"sass": "^1.69.5",
+		"sass": "^1.69.6",
 		"scheduler": "^0.23.0",
 		"socket.io-client": "^4.7.2",
 		"use-context-selector": "^1.4.1",
