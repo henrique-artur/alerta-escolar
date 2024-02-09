@@ -1,5 +1,5 @@
 # Name the node stage "builder"
-FROM node:20.9.0-alpine as builder
+FROM node:alpine as builder
 # set work directory
 WORKDIR /app
 # copy project
